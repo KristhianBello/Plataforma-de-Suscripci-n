@@ -1,9 +1,12 @@
-integrantes:
-Gonzalo Alexander Delgado Macias
-Carlos Alberto Delgado Campuzano
-Alex Fabricio Anchundia Mero
-Kristhian Augusto Bello Soledispa 
-Naomi Carolina Delgado Anchundia
+## Integrantes del Proyecto
+
+| Nombre Completo        | Usuario de GitHub         |
+|------------------------|---------------------------|
+| Naomi Carolina Delgado Anchundia   | [@delgadonaomi]
+| Gonzalo Alexander Delgado Macias   | [@Alex-20kd]
+| Kristhian Augusto Bello Soledispa  | [@KristhianBello]
+| Carlos Alberto Delgado Campuzano   | [@carlos-73CK]
+
 
 Documentación Arquitectónica – LearnPro
 1. Introducción y Objetivos
