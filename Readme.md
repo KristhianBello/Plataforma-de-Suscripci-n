@@ -24,6 +24,8 @@ Objetivos de arquitectura:
 -Seguridad: esencial en pagos y control de acceso a contenido.
 
 🏗️ Estructura del Proyecto
+
+
 LearnPro/
 ├── api-gateway/              # Servidor principal con Express y frontend React (Vite)
 │   ├── index.js              # Punto de entrada del backend (Express)
