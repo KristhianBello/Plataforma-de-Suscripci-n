@@ -24,3 +24,45 @@ Objetivos de arquitectura:
 -Seguridad: esencial en pagos y control de acceso a contenido.
 
 🏗️ Estructura del Proyecto
+LearnPro/
+├── api-gateway/              # Servidor principal con Express y frontend React (Vite)
+│   ├── index.js              # Punto de entrada del backend (Express)
+│   └── public/               # Cliente React (SPA)
+│       ├── index.html
+│       ├── main.jsx
+│       ├── App.jsx
+│       └── ...               # Componentes y páginas del frontend
+│
+├── core/                     # Núcleo del sistema (siguiendo DDD - Domain Driven Design)
+│   ├── application/          # Casos de uso (lógica de aplicación)
+│   ├── domain/               # Entidades, interfaces y lógica de negocio
+│   └── infrastructure/       # Adaptadores: DB, servicios externos, APIs, etc.
+│
+├── modules/                  # Módulos funcionales por dominio (ej. auth, courses, payments)
+│   ├── auth/                 # Módulo de autenticación y autorización
+│   ├── courses/              # Gestión de cursos y lecciones
+│   ├── users/                # Gestión de usuarios y suscripciones
+│   ├── payments/             # Integración con Stripe y PayPal
+│   └── notifications/        # Recordatorios y notificaciones automáticas
+│
+├── shared/                   # Código compartido (utils, middlewares, validaciones)
+│   ├── middlewares/
+│   ├── utils/
+│   ├── constants/
+│   └── config/
+│
+├── database/                 # Esquema y configuración de Supabase
+│   └── supabase-schema.sql   # Script SQL del modelo de datos
+│
+├── docs/                     # Documentación técnica
+│   ├── adr/                  # Architecture Decision Records (ADRs)
+│   ├── business-model-canvas.md  # Modelo de negocio (BMC)
+│   ├── c4-model.md           # Diagramas C4 (Contexto, Contenedores, Componentes)
+│   ├── swagger.yaml          # Especificación OpenAPI (Swagger)
+│   └── index.md              # Documentación técnica general
+│
+├── .env.example              # Archivo ejemplo de variables de entorno
+├── .gitignore                # Archivos y carpetas a ignorar por Git
+├── package.json              # Dependencias y scripts del proyecto
+├── package-lock.json         # Bloqueo de dependencias
+└── README.md                 # Documentación principal del proyecto
