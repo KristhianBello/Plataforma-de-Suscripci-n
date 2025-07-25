@@ -1,0 +1,151 @@
+openapi: 3.1.0
+info:
+  title: LearnPro API
+  version: 1.0.0
+  description: API REST para la gestión de la plataforma LearnPro de cursos online por suscripción.
+  contact:
+    name: LearnPro Team
+    email: soporte@learnpro.com
+    url: https://learnpro.com
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+  - url: https://api.learnpro.com
+    description: Producción
+
+tags:
+  - name: Auth
+    description: Endpoints de autenticación
+  - name: Usuarios
+    description: Gestión de usuarios
+  - name: Cursos
+    description: Gestión de cursos
+  - name: Suscripciones
+    description: Planes y pagos
+  - name: Pagos
+    description: Stripe/PayPal Webhooks
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Registro de usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+      responses:
+        '201':
+          description: Usuario creado
+        '400':
+          description: Datos inválidos
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login de usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: Token JWT generado
+        '401':
+          description: Credenciales inválidas
+
+  /users/me:
+    get:
+      tags: [Usuarios]
+      summary: Obtener perfil del usuario autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Información del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /courses:
+    get:
+      tags: [Cursos]
+      summary: Listar todos los cursos
+      responses:
+        '200':
+          description: Lista de cursos
+
+  /subscriptions:
+    post:
+      tags: [Suscripciones]
+      summary: Crear nueva suscripción (Stripe/PayPal)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionDto'
+      responses:
+        '201':
+          description: Suscripción iniciada
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegisterDto:
+      type: object
+      required: [email, password, fullName]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+        fullName:
+          type: string
+
+    LoginDto:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    SubscriptionDto:
+      type: object
+      required: [planId, paymentMethod]
+      properties:
+        planId:
+          type: string
+        paymentMethod:
+          type: string
+          enum: [stripe, paypal]
+
