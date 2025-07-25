@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersModuleService } from './users-module.service';
-import { CreateUsersModuleDto } from './dto/create-users-module.dto';
+import { CreateUsersModuleDto } from './dto/change-password.dto.ts';
 import { UpdateUsersModuleDto } from './dto/update-users-module.dto';
 
 @Controller('users-module')
