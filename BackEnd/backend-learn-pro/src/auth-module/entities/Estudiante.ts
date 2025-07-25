@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { Exclude } from 'class-transformer'; // Importa Exclude para ocultar campos sensibles
+
 @Entity('estudiantes') // Mapea a la tabla 'estudiantes' en la base de datos
 export class Estudiante {
   @PrimaryGeneratedColumn()
@@ -15,7 +15,6 @@ export class Estudiante {
   email: string;
 
   @Column({ type: 'text', nullable: false })
-  @Exclude() // Excluye este campo de la serialización para no exponer la contraseña
   contraseña: string; // Almacenará el hash de la contraseña
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', nullable: false })
