@@ -15,17 +15,18 @@ import { CoursesModuleModule } from './courses-module/courses-module.module'; //
 import { SubscriptionsModuleModule } from './subscriptions-module/subscriptions-module.module'; // Renombrado a SubscriptionsModule
 import { PaymentsModuleModule } from './payments-module/payments-module.module'; // Renombrado a PaymentsModule
 import { ProgressModuleModule } from './progress-module/progress-module.module'; // Renombrado a ProgressModule
+import { NotificationsModule } from './notifications-module/notifications.module'; // Módulo de notificaciones
 
 // Importa tus entidades globales o las que TypeORM necesita conocer desde el inicio
 // Asegúrate de que todas tus entidades (Estudiante, Administrador, Curso, Suscripcion, Pago, Notificacion)
 // estén listadas aquí o que TypeORM las descubra automáticamente.
 import { Estudiante } from './auth-module/entities/Estudiante';
 import { Administrador } from './auth-module/entities/Administrador';
+import { Notificacion } from './notifications-module/entities/notificacion.entity';
 // Importa las entidades de otros módulos aquí a medida que las crees
 // import { Curso } from './courses-module/entities/curso.entity';
 // import { Suscripcion } from './subscriptions-module/entities/suscripcion.entity';
 // import { Pago } from './payments-module/entities/pago.entity';
-// import { Notificacion } from './notifications-module/entities/notificacion.entity';
 
 
 @Module({
@@ -51,10 +52,10 @@ import { Administrador } from './auth-module/entities/Administrador';
           // A medida que crees más entidades en otros módulos, añádelas aquí.
           Estudiante,
           Administrador,
+          Notificacion,
           // Curso,
           // Suscripcion,
           // Pago,
-          // Notificacion,
         ],
         synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE') || false, // ¡CUIDADO EN PRODUCCIÓN!
         logging: configService.get<boolean>('DATABASE_LOGGING') || false, // Habilita logs de SQL (útil para depuración)
@@ -72,7 +73,7 @@ import { Administrador } from './auth-module/entities/Administrador';
     SubscriptionsModuleModule, // Renombrado a SubscriptionsModule
     PaymentsModuleModule, // Renombrado a PaymentsModule
     ProgressModuleModule, // Renombrado a ProgressModule
-    // Si tienes un NotificationsModule, impórtalo aquí también
+    NotificationsModule, // Módulo de notificaciones
   ],
   controllers: [AppController],
   providers: [AppService],

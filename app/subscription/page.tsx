@@ -5,12 +5,20 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { BookOpen, Check, Crown, CreditCard, Award, Download, Smartphone, Headphones } from "lucide-react"
 import Link from "next/link"
+import StripePayment from "@/components/payments/stripe-payment"
+import { useAuth } from "@/hooks/use-auth"
+import { ProtectedRoute } from "@/components/protected-route"
+import { toast } from "sonner"
 
-export default function SubscriptionPage() {
+function SubscriptionContent() {
   const [isAnnual, setIsAnnual] = useState(false)
   const [currentPlan, setCurrentPlan] = useState("free") // free, monthly, annual
+  const [showPayment, setShowPayment] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<any>(null)
+  const { user } = useAuth()
 
   const plans = [
     {
@@ -82,11 +90,31 @@ export default function SubscriptionPage() {
   ]
 
   const handlePlanSelect = (planId: string) => {
-    if (planId !== currentPlan) {
-      // Handle plan selection logic
-      console.log(`Selecting plan: ${planId}`)
+    if (planId === "free" || planId === currentPlan) return;
+    
+    if (!user) {
+      toast.error("Debes iniciar sesión para suscribirte");
+      return;
     }
-  }
+
+    const plan = plans.find(p => p.id === planId);
+    if (!plan) return;
+
+    setSelectedPlan(plan);
+    setShowPayment(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowPayment(false);
+    setCurrentPlan(selectedPlan?.id || "free");
+    toast.success("¡Suscripción activada exitosamente!");
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast.error("Error en el pago", {
+      description: error,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -339,6 +367,27 @@ export default function SubscriptionPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Payment Dialog */}
+      <Dialog open={showPayment} onOpenChange={setShowPayment}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Complete Your Subscription</DialogTitle>
+            <DialogDescription>
+              {selectedPlan && `You're subscribing to the ${selectedPlan.name} plan for $${selectedPlan.price}${selectedPlan.billing === 'monthly' ? '/month' : '/year'}.`}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedPlan && (
+            <StripePayment
+              amount={selectedPlan.price}
+              planName={selectedPlan.name}
+              planType={selectedPlan.billing === 'monthly' ? 'mensual' : 'anual'}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -22,4 +22,7 @@ export class Estudiante {
 
   @Column({ type: 'boolean', default: true, nullable: false })
   estado: boolean;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  stripe_customer_id: string; // ID del customer en Stripe
 }
