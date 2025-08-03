@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+**/node_modules/
 
 # testing
 /coverage
@@ -25,9 +26,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env*.local
-.env.local
+# env files (ignore all env files except examples)
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -42,3 +44,30 @@ next-env.d.ts
 
 # OS
 Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Temporary folders
+tmp/
+temp/
+
+# Database
+*.db
+*.sqlite
+
+# Sensitive files
+*.pem
+*.key
+!*.example.*
