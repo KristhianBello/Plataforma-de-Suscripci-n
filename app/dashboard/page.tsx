@@ -138,10 +138,18 @@ function DashboardContent() {
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-12 w-12">
                     <AvatarImage src="/placeholder.svg?height=48&width=48" />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback>
+                      {user?.user_metadata?.first_name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
+                      {user?.user_metadata?.last_name?.[0] || ''}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-semibold">John Doe</h3>
+                    <h3 className="font-semibold">
+                      {user?.user_metadata?.full_name || 
+                       `${user?.user_metadata?.first_name || ''} ${user?.user_metadata?.last_name || ''}`.trim() ||
+                       user?.email?.split('@')[0] || 
+                       'Usuario'}
+                    </h3>
                     <p className="text-sm text-gray-600">Premium Member</p>
                   </div>
                 </div>

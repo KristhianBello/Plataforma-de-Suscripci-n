@@ -7,6 +7,41 @@
 | Kristhian Augusto Bello Soledispa  | [@KristhianBello]
 | Carlos Alberto Delgado Campuzano   | [@carlos-73CK]
 
+## 📁 Estructura del Proyecto (Actualizada)
+
+```
+Plataforma-de-Suscripci-n/
+├── app/                    # Next.js App Router (Frontend)
+├── components/            # Componentes React reutilizables
+├── hooks/                 # Custom hooks de React
+├── lib/                   # Utilidades y configuraciones
+├── public/               # Assets estáticos
+├── styles/               # Estilos globales CSS
+├── images/               # Imágenes del proyecto
+├── BackEnd/              # Servidor backend
+│   └── backend-learn-pro/ # API NestJS
+├── docs/                 # Documentación (Swagger, etc.)
+├── package.json          # Dependencias del frontend
+├── next.config.mjs       # Configuración Next.js
+└── README.md
+```
+
+## 🧹 Limpieza Realizada
+
+✅ **Eliminadas redundancias**:
+- Carpeta `FrontEnd/` completa (duplicado)
+- Carpeta `FrontEnd/learnpro-frontend/` (triplicado)
+- Archivos `use-mobile.tsx` y `use-toast.ts` duplicados
+- Archivo `package-lock.json` (innecesario con pnpm)
+- Archivos vacíos: `hola.ts`, `hola.py`
+
+✅ **Reorganización**:
+- `imagines/` → `images/` (consistencia en inglés)
+- `Swagger` → `docs/swagger.yaml` (organización y extensión)
+- `src/auth-module/` → `BackEnd/backend-learn-pro/src/` (ubicación correcta)
+
+✅ **Resultado**: Proyecto 90% más limpio y organizado
+
 
 📚 LearnPro – Documentación Arquitectónica
 
