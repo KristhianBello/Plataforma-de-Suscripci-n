@@ -58,10 +58,6 @@ Objetivos de arquitectura:
 
 -Seguridad: esencial en pagos y control de acceso a contenido.
 
-🏗️ Estructura del Proyecto
-
-<img width="666" height="912" alt="image" src="https://github.com/user-attachments/assets/47891044-257e-4ddd-8c8d-aa69dd0adcee" />
-
 ##  Interesados y sus Objetivos
 
 | Interesado         | Objetivo                                                                 |
@@ -72,5 +68,6 @@ Objetivos de arquitectura:
 | Equipo de Marketing| Acceso a métricas e informes para mejorar la conversión y retención.    |
 | Soporte Técnico    | Diagnóstico rápido de problemas y mantenimiento seguro.        
 
- ## 🚀 Vista de Despliegue
- -Aws
+ ## 🚀 Vista de Despliegue (Actualizado)
+Plataforma desplegada en Vercel, garantizando escalabilidad y alta disponibilidad.
+
