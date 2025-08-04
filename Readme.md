@@ -128,3 +128,5 @@ El proyecto incluye pruebas unitarias y de integración que se pueden ejecutar c
  ## 🚀 Vista de Despliegue (Actualizado)
 Plataforma desplegada en Vercel, garantizando escalabilidad y alta disponibilidad.
 
+hola voy a arreglar el backend
+
