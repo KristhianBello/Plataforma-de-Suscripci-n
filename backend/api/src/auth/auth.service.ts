@@ -1,3 +1,5 @@
+// src/auth-module/auth.service.ts
+
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
@@ -5,15 +7,20 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcryptjs';
 
+import { UserFactory } from './factories/users.factory'; // <-- Importamos el factory
+import { UserEntity } from './factories/user.factory'; // <-- Importamos el tipo de la entidad
+
+
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private userFactory: UserFactory, // <-- Inyectamos el factory
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const { email, password, ...userData } = registerDto;
+    const { email, password, rol = 'estudiante', ...userData } = registerDto;
     
     // Verificar si el usuario ya existe
     const existingUser = await this.usersService.findByEmail(email);
@@ -24,12 +31,20 @@ export class AuthService {
     // Hashear la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // Crear el usuario
-    const user = await this.usersService.create({
+    // Patrón de Diseño: Factory Method
+    // Usamos el factory para crear la entidad de usuario correcta
+    // Se asume que registerDto tiene una propiedad 'rol'. Si no, por defecto será 'estudiante'.
+    const newUserEntity = this.userFactory.createUser(rol as 'estudiante' | 'administrador');
+    
+    // Asignar los datos del DTO a la entidad creada
+    Object.assign(newUserEntity, {
       ...userData,
       email,
       password: hashedPassword,
     });
+
+    // Guardar la entidad de usuario en la base de datos
+    const user = await this.usersService.create(newUserEntity);
 
     // Generar token
     const token = this.generateToken(user);
