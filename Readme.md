@@ -7,6 +7,8 @@
 | Kristhian Augusto Bello Soledispa  | [@KristhianBello]
 | Carlos Alberto Delgado Campuzano   | [@carlos-73CK]
 
+
+
 ## 📁 Estructura del Proyecto (Actualizada)
 
 ```
@@ -60,6 +62,7 @@ Objetivos de arquitectura:
 
 ##  Interesados y sus Objetivos
 
+
 | Interesado         | Objetivo                                                                 |
 |--------------------|--------------------------------------------------------------------------|
 | Estudiantes        | Acceso fluido y personalizado a los cursos según su suscripción.        |
@@ -67,6 +70,50 @@ Objetivos de arquitectura:
 | Desarrolladores    | Código modular y mantenible que permita añadir nuevas funcionalidades.  |
 | Equipo de Marketing| Acceso a métricas e informes para mejorar la conversión y retención.    |
 | Soporte Técnico    | Diagnóstico rápido de problemas y mantenimiento seguro.        
+
+Instalación
+
+1. Clonar el repositorio:
+
+git clone https://github.com/KristhianBello/Plataforma-de-Suscripci-n.git
+cd Plataforma-de-Suscripci-n
+
+2. Instala dependencias del frontend:
+
+npm install
+
+3. Instala dependencias del backend:
+
+cd BackEnd/backend-learn-pro
+npm install
+
+Configuración
+
+-Copiar el archivo de ejemplo de variables de entorno:
+
+cp .env.example .env
+
+-Editar .env con las credenciales necesarias para la base de datos, puertos, claves API, etc.
+-Configurar la base de datos y ejecutar migraciones si aplica (consultar documentación interna o scripts incluidos).
+
+Ejecución
+
+Frontend
+Desde la raíz del proyecto:
+
+npm dev
+Abre http://localhost:3000 para acceder a la aplicación en desarrollo.
+
+Backend
+Desde BackEnd/backend-learn-pro:
+
+npm start:dev
+El backend estará escuchando en el puerto configurado (por defecto http://localhost:3001).
+
+Testing
+El proyecto incluye pruebas unitarias y de integración que se pueden ejecutar con el siguiente comando desde el backend:
+
+npm test
 
  ## 🚀 Vista de Despliegue (Actualizado)
 Plataforma desplegada en Vercel, garantizando escalabilidad y alta disponibilidad.
