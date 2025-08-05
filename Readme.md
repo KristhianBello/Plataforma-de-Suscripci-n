@@ -9,6 +9,87 @@
 
 
 
+# 📚 Documentación de la API
+
+## Autenticación
+
+La API utiliza autenticación basada en tokens JWT. Incluye el token en el encabezado `Authorization` de las peticiones:
+
+```
+Authorization: Bearer <tu_token_jwt>
+```
+
+## Endpoints de Autenticación
+
+### Iniciar Sesión
+
+```http
+POST /auth/login
+```
+
+**Cuerpo de la petición:**
+```json
+{
+  "email": "usuario@ejemplo.com",
+  "password": "contraseña123"
+}
+```
+
+### Registrar Usuario
+
+```http
+POST /auth/register
+```
+
+**Cuerpo de la petición:**
+```json
+{
+  "email": "nuevo@usuario.com",
+  "password": "contraseña123",
+  "fullName": "Nombre Completo"
+}
+```
+
+### Cerrar Sesión
+
+```http
+POST /auth/logout
+```
+
+### Obtener Usuario Actual
+
+```http
+GET /auth/me
+```
+
+## Manejo de Errores
+
+La API devuelve respuestas de error estandarizadas:
+
+```json
+{
+  "statusCode": 400,
+  "message": "Mensaje de error descriptivo",
+  "error": "Bad Request"
+}
+```
+
+## Estructura del Proyecto
+
+```
+Plataforma-de-Suscripci-n/
+├── app/                    # Next.js App Router (Frontend)
+├── components/            # Componentes React reutilizables
+├── hooks/                 # Custom hooks de React
+├── lib/                   # Utilidades y configuraciones
+│   ├── api/               # Servicios de API
+│   │   ├── api.service.ts # Cliente HTTP
+│   │   └── auth.service.ts# Servicio de autenticación
+│   └── supabase.ts        # Configuración de Supabase
+├── public/               # Assets estáticos
+└── ...
+```
+
 ## 📁 Estructura del Proyecto (Actualizada)
 
 ```
