@@ -90,6 +90,123 @@ Plataforma-de-Suscripci-n/
 └── ...
 ```
 
+# 🚀 Backend - Documentación Técnica
+
+## Arquitectura
+
+El backend está construido con NestJS, un framework de Node.js para construir aplicaciones del lado del servidor eficientes y escalables. Utiliza una arquitectura modular basada en controladores y servicios.
+
+### Tecnologías Principales
+
+- **NestJS**: Framework de backend
+- **TypeORM**: ORM para la capa de datos
+- **SQLite**: Base de datos (puede configurarse para otros motores SQL)
+- **JWT**: Autenticación basada en tokens
+- **Passport**: Middleware de autenticación
+
+## Estructura del Backend
+
+```
+BackEnd/
+├── api/
+│   ├── src/
+│   │   ├── auth/               # Módulo de autenticación
+│   │   │   ├── strategies/     # Estrategias de autenticación
+│   │   │   ├── entities/       # Entidades de usuario
+│   │   │   └── repositories/   # Repositorios personalizados
+│   │   ├── users/              # Gestión de usuarios
+│   │   ├── courses/            # Gestión de cursos
+│   │   ├── payments/           # Procesamiento de pagos
+│   │   └── subscriptions/      # Gestión de suscripciones
+│   └── test/                   # Pruebas unitarias y de integración
+```
+
+## Módulos Principales
+
+### 1. Módulo de Autenticación (`/auth`)
+
+- **Autenticación JWT**
+- **Soporte para múltiples roles** (Estudiante, Administrador)
+- **Registro y login de usuarios**
+- **Protección de rutas**
+
+### 2. Módulo de Usuarios (`/users`)
+
+- Gestión de perfiles de usuario
+- Actualización de información personal
+- Cambio de contraseña
+- Asignación de roles
+
+### 3. Módulo de Cursos (`/courses`)
+
+- Creación y gestión de cursos
+- Inscripción de estudiantes
+- Gestión de contenido
+- Evaluaciones y calificaciones
+
+### 4. Módulo de Pagos (`/payments`)
+
+- Integración con pasarelas de pago
+- Gestión de suscripciones
+- Historial de transacciones
+- Facturación electrónica
+
+### 5. Módulo de Suscripciones (`/subscriptions`)
+
+- Planes de suscripción
+- Gestión de membresías
+- Renovaciones automáticas
+- Beneficios por nivel
+
+## Configuración del Entorno
+
+Crea un archivo `.env` en la raíz del backend con las siguientes variables:
+
+```env
+# Configuración de la aplicación
+NODE_ENV=development
+PORT=3000
+
+# Base de datos
+DB_TYPE=sqlite
+DB_DATABASE=database.sqlite
+
+# Autenticación
+JWT_SECRET=tu_clave_secreta_jwt
+JWT_EXPIRES_IN=24h
+
+# Configuración de correo (opcional)
+MAERL_SMTP_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USER=tu_usuario
+MAIL_PASS=tu_contraseña
+```
+
+## Instalación y Ejecución
+
+1. Instalar dependencias:
+   ```bash
+   cd BackEnd/api
+   npm install
+   ```
+
+2. Iniciar el servidor en desarrollo:
+   ```bash
+   npm run start:dev
+   ```
+
+3. Para producción:
+   ```bash
+   npm run build
+   npm run start:prod
+   ```
+
+## Documentación de la API
+
+La documentación interactiva de la API está disponible en:
+- `http://localhost:3000/api/docs` (Swagger UI)
+- `http://localhost:3000/api/docs-json` (Esquema OpenAPI)
+
 ## 📁 Estructura del Proyecto (Actualizada)
 
 ```
