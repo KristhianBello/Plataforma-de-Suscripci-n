@@ -7,20 +7,19 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcryptjs';
 
-import { UserFactory } from './factories/users.factory'; // <-- Importamos el factory
-import { UserEntity } from './factories/user.factory'; // <-- Importamos el tipo de la entidad
-
+import { UserFactory } from './factories/users.factory';
+import { UserEntity } from './factories/users.factory';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private userFactory: UserFactory, // <-- Inyectamos el factory
+    private userFactory: UserFactory,
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const { email, password, rol = 'estudiante', ...userData } = registerDto;
+    const { email, password, ...userData } = registerDto;
     
     // Verificar si el usuario ya existe
     const existingUser = await this.usersService.findByEmail(email);
@@ -31,10 +30,8 @@ export class AuthService {
     // Hashear la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // Patrón de Diseño: Factory Method
-    // Usamos el factory para crear la entidad de usuario correcta
-    // Se asume que registerDto tiene una propiedad 'rol'. Si no, por defecto será 'estudiante'.
-    const newUserEntity = this.userFactory.createUser(rol as 'estudiante' | 'administrador');
+    // Crear usuario como estudiante por defecto
+    const newUserEntity = this.userFactory.createUser('estudiante');
     
     // Asignar los datos del DTO a la entidad creada
     Object.assign(newUserEntity, {
@@ -79,6 +76,14 @@ export class AuthService {
     };
   }
 
+  async getProfile(userId: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return this.excludePassword(user);
+  }
+
   async validateUser(userId: string) {
     const user = await this.usersService.findById(userId);
     if (!user) {
@@ -88,7 +93,7 @@ export class AuthService {
   }
 
   private generateToken(user: any) {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, rol: user.rol };
     return this.jwtService.sign(payload);
   }
 

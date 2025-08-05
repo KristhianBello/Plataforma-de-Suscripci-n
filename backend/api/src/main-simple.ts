@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
+import { AppModule } from './app.module-simple';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,6 +29,8 @@ async function bootstrap() {
   
   console.log(`🚀 Application is running on: http://localhost:${port}`);
   console.log(`📚 API Health Check: http://localhost:${port}/health`);
+  console.log(`🔐 Auth endpoints: http://localhost:${port}/auth`);
+  console.log(`📖 Courses endpoints: http://localhost:${port}/courses`);
 }
 
 bootstrap();

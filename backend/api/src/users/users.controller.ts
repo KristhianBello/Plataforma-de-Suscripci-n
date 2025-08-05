@@ -1,17 +1,5 @@
 import { Controller, Get, Put, Delete, Body, Param, Request } from '@nestjs/common';
-import { UsersService } from './users.service';
-
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  role: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { UsersService, User } from './users.service';
 
 @Controller('users')
 export class UsersController {

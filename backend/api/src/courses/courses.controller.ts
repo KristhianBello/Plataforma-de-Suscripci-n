@@ -1,18 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { CoursesService } from './courses.service';
-
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  instructor: string;
-  duration: string;
-  level: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Course } from './entities/course.entity';
 
 @Controller('courses')
 export class CoursesController {
