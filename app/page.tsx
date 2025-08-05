@@ -84,19 +84,19 @@ function HomeContent() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-3xl font-bold text-blue-600 mb-2">10K+</div>
-              <div className="text-gray-600">Active Students</div>
+              <div className="text-gray-600">Estudiantes Activos</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
-              <div className="text-gray-600">Courses</div>
+              <div className="text-gray-600">Cursos</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-blue-600 mb-2">95%</div>
-              <div className="text-gray-600">Completion Rate</div>
+              <div className="text-gray-600">Tasa de Finalización</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-blue-600 mb-2">4.9</div>
-              <div className="text-gray-600">Average Rating</div>
+              <div className="text-gray-600">Puntuación Promedio</div>
             </div>
           </div>
         </div>
@@ -106,60 +106,60 @@ function HomeContent() {
       <section id="features" className="py-20 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Everything You Need to Learn</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Todo lo que Necesitas para Aprender</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our platform provides all the tools and features you need for effective online learning.
+              Nuestra plataforma proporciona todas las herramientas y características que necesitas para un aprendizaje en línea efectivo.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <BookOpen className="h-12 w-12 text-blue-600 mb-4" />
-                <CardTitle>Extensive Course Library</CardTitle>
+                <CardTitle>Amplia Biblioteca de Cursos</CardTitle>
                 <CardDescription>
-                  Access thousands of courses across multiple disciplines and skill levels.
+                  Acceso a miles de cursos en múltiples disciplinas y niveles de habilidad.
                 </CardDescription>
               </CardHeader>
             </Card>
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <TrendingUp className="h-12 w-12 text-green-600 mb-4" />
-                <CardTitle>Progress Tracking</CardTitle>
+                <CardTitle>Seguimiento de Progreso</CardTitle>
                 <CardDescription>
-                  Monitor your learning journey with detailed analytics and progress reports.
+                  Monitorea tu viaje de aprendizaje con análisis detallados e informes de progreso.
                 </CardDescription>
               </CardHeader>
             </Card>
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <Award className="h-12 w-12 text-purple-600 mb-4" />
-                <CardTitle>Certificates</CardTitle>
+                <CardTitle>Certificados</CardTitle>
                 <CardDescription>
-                  Earn verified certificates upon course completion to showcase your skills.
+                  Obtén certificados verificados al completar los cursos para mostrar tus habilidades.
                 </CardDescription>
               </CardHeader>
             </Card>
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <Users className="h-12 w-12 text-orange-600 mb-4" />
-                <CardTitle>Community Learning</CardTitle>
+                <CardTitle>Aprendizaje en Comunidad</CardTitle>
                 <CardDescription>
-                  Connect with fellow learners and instructors in our vibrant community.
+                  Conecta con otros estudiantes e instructores en nuestra vibrante comunidad.
                 </CardDescription>
               </CardHeader>
             </Card>
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <Star className="h-12 w-12 text-yellow-600 mb-4" />
-                <CardTitle>Personalized Experience</CardTitle>
-                <CardDescription>AI-powered recommendations tailored to your learning style and goals.</CardDescription>
+                <CardTitle>Experiencia Personalizada</CardTitle>
+                <CardDescription>Recomendaciones impulsadas por IA adaptadas a tu estilo de aprendizaje y objetivos.</CardDescription>
               </CardHeader>
             </Card>
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <Play className="h-12 w-12 text-red-600 mb-4" />
-                <CardTitle>Interactive Content</CardTitle>
-                <CardDescription>Engage with interactive videos, quizzes, and hands-on projects.</CardDescription>
+                <CardTitle>Contenido Interactivo</CardTitle>
+                <CardDescription>Participa con videos interactivos, cuestionarios y proyectos prácticos.</CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -170,69 +170,73 @@ function HomeContent() {
       <section id="pricing" className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Learning Plan</h2>
-            <p className="text-xl text-gray-600">Flexible pricing options to fit your learning needs and budget.</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Elige tu Plan de Aprendizaje</h2>
+            <p className="text-xl text-gray-600">Opciones de precios flexibles que se adaptan a tus necesidades de aprendizaje y presupuesto.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Card className="border-2 border-gray-200">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Monthly Plan</CardTitle>
+                <CardTitle className="text-2xl">Plan Mensual</CardTitle>
                 <div className="text-4xl font-bold text-gray-900 mt-4">
-                  $29<span className="text-lg text-gray-600">/month</span>
+                  $18<span className="text-lg text-gray-600">/mes</span>
                 </div>
-                <CardDescription>Perfect for getting started</CardDescription>
+                <CardDescription>Perfecto para empezar</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Access to all courses
+                    Acceso a todos los cursos
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Progress tracking
+                    Seguimiento de progreso
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Community access
+                    Acceso a la comunidad
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Mobile app access
+                    Acceso a la aplicación móvil
                   </li>
                 </ul>
-                <Button className="w-full mt-6">Get Started</Button>
+                <Link href="/subscription">
+                  <Button className="w-full mt-6">Comenzar</Button>
+                </Link>
               </CardContent>
             </Card>
             <Card className="border-2 border-blue-600 relative">
-              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600">Most Popular</Badge>
+              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600">Más Popular</Badge>
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Annual Plan</CardTitle>
+                <CardTitle className="text-2xl">Plan Anual</CardTitle>
                 <div className="text-4xl font-bold text-gray-900 mt-4">
-                  $290<span className="text-lg text-gray-600">/year</span>
+                  $80<span className="text-lg text-gray-600">/año</span>
                 </div>
-                <CardDescription>Save 17% with annual billing</CardDescription>
+                <CardDescription>Ahorra 63% con facturación anual</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Everything in Monthly
+                    Todo lo del Plan Mensual
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Priority support
+                    Soporte prioritario
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Offline downloads
+                    Descargas sin conexión
                   </li>
                   <li className="flex items-center">
                     <Check className="h-5 w-5 text-green-600 mr-3" />
-                    Advanced analytics
+                    Análisis avanzados
                   </li>
                 </ul>
-                <Button className="w-full mt-6">Get Started</Button>
+                <Link href="/subscription">
+                  <Button className="w-full mt-6">Comenzar</Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
@@ -249,72 +253,72 @@ function HomeContent() {
                 <span className="text-xl font-bold">LearnPro</span>
               </div>
               <p className="text-gray-400">
-                Empowering learners worldwide with quality education and personalized learning experiences.
+                Empoderando a estudiantes de todo el mundo con educación de calidad y experiencias de aprendizaje personalizadas.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Product</h3>
+              <h3 className="font-semibold mb-4">Producto</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Courses
+                    Cursos
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Pricing
+                    Precios
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Features
+                    Características
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
+              <h3 className="font-semibold mb-4">Empresa</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white">
-                    About
+                    Acerca de
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Careers
+                    Carreras
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Contact
+                    Contacto
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Support</h3>
+              <h3 className="font-semibold mb-4">Soporte</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Help Center
+                    Centro de Ayuda
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Privacy Policy
+                    Política de Privacidad
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white">
-                    Terms of Service
+                    Términos de Servicio
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 LearnPro. All rights reserved.</p>
+            <p>&copy; 2024 LearnPro. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

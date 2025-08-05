@@ -39,7 +39,7 @@ export default function SubscriptionPage() {
       id: "monthly",
       name: "Monthly Pro",
       description: "Full access with monthly billing",
-      price: { monthly: 29, annual: 29 },
+      price: { monthly: 18, annual: 18 },
       features: [
         "Access to all 500+ courses",
         "Detailed progress analytics",
@@ -57,8 +57,8 @@ export default function SubscriptionPage() {
       id: "annual",
       name: "Annual Pro",
       description: "Best value with annual billing",
-      price: { monthly: 24, annual: 288 },
-      originalPrice: { annual: 348 },
+      price: { monthly: 6.67, annual: 80 },
+      originalPrice: { annual: 216 },
       features: [
         "Access to all 500+ courses",
         "Detailed progress analytics",
@@ -127,7 +127,7 @@ export default function SubscriptionPage() {
         <header className="bg-white border-b">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <Link href="/dashboard" className="flex items-center space-x-2">
+              <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                 <BookOpen className="h-8 w-8 text-blue-600" />
                 <span className="text-2xl font-bold text-gray-900">LearnPro</span>
               </Link>
@@ -160,7 +160,7 @@ export default function SubscriptionPage() {
               <Switch checked={isAnnual} onCheckedChange={setIsAnnual} />
               <span className={`text-sm ${isAnnual ? "font-medium" : "text-gray-600"}`}>Annual</span>
               <Badge variant="secondary" className="ml-2">
-                Save 17%
+                Save 63%
               </Badge>
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function SubscriptionPage() {
                         {plan.originalPrice && isAnnual && (
                           <div className="text-sm text-gray-500 line-through">${plan.originalPrice.annual}/year</div>
                         )}
-                        {isAnnual && plan.price.monthly < 29 && (
+                        {isAnnual && plan.price.monthly < 18 && (
                           <div className="text-sm text-green-600 font-medium">
                             ${plan.price.monthly}/month when billed annually
                           </div>

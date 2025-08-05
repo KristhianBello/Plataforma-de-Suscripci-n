@@ -28,28 +28,28 @@ export default function AdminDashboard() {
 
   const stats = [
     {
-      title: "Total Users",
+      title: "Total de Usuarios",
       value: "10,234",
       change: "+12%",
       icon: Users,
       color: "text-blue-600",
     },
     {
-      title: "Active Courses",
+      title: "Cursos Activos",
       value: "156",
       change: "+8%",
       icon: BookOpen,
       color: "text-green-600",
     },
     {
-      title: "Monthly Revenue",
+      title: "Ingresos Mensuales",
       value: "$45,678",
       change: "+23%",
       icon: DollarSign,
       color: "text-purple-600",
     },
     {
-      title: "Completion Rate",
+      title: "Tasa de Finalización",
       value: "87%",
       change: "+5%",
       icon: TrendingUp,
@@ -147,7 +147,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{stat.change} from last month</p>
+                <p className="text-xs text-muted-foreground">{stat.change} desde el mes pasado</p>
               </CardContent>
             </Card>
           ))}
@@ -156,10 +156,10 @@ export default function AdminDashboard() {
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="courses">Courses</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="overview">Resumen</TabsTrigger>
+            <TabsTrigger value="users">Usuarios</TabsTrigger>
+            <TabsTrigger value="courses">Cursos</TabsTrigger>
+            <TabsTrigger value="analytics">Análisis</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -167,8 +167,8 @@ export default function AdminDashboard() {
               {/* Recent Users */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Recent Users</CardTitle>
-                  <CardDescription>Latest user registrations</CardDescription>
+                  <CardTitle>Usuarios Recientes</CardTitle>
+                  <CardDescription>Últimos registros de usuarios</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -198,8 +198,8 @@ export default function AdminDashboard() {
               {/* Popular Courses */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Popular Courses</CardTitle>
-                  <CardDescription>Most enrolled courses this month</CardDescription>
+                  <CardTitle>Cursos Populares</CardTitle>
+                  <CardDescription>Cursos con más inscripciones este mes</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
                       <div key={course.id} className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">{course.title}</p>
-                          <p className="text-sm text-gray-600">{course.students} students</p>
+                          <p className="text-sm text-gray-600">{course.students} estudiantes</p>
                         </div>
                         <div className="text-right">
                           <p className="font-medium">★ {course.rating}</p>
@@ -228,19 +228,19 @@ export default function AdminDashboard() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>User Management</CardTitle>
-                    <CardDescription>Manage all registered users</CardDescription>
+                    <CardTitle>Gestión de Usuarios</CardTitle>
+                    <CardDescription>Gestionar todos los usuarios registrados</CardDescription>
                   </div>
                   <Button>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add User
+                    Agregar Usuario
                   </Button>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                     <Input
-                      placeholder="Search users..."
+                      placeholder="Buscar usuarios..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10"
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
                   </div>
                   <Button variant="outline">
                     <Filter className="h-4 w-4 mr-2" />
-                    Filter
+                    Filtrar
                   </Button>
                 </div>
               </CardHeader>
@@ -256,11 +256,11 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Subscription</TableHead>
-                      <TableHead>Join Date</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>Usuario</TableHead>
+                      <TableHead>Suscripción</TableHead>
+                      <TableHead>Fecha de Registro</TableHead>
+                      <TableHead>Estado</TableHead>
+                      <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -301,15 +301,15 @@ export default function AdminDashboard() {
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem>
                                 <Eye className="h-4 w-4 mr-2" />
-                                View Details
+                                Ver Detalles
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 <Edit className="h-4 w-4 mr-2" />
-                                Edit User
+                                Editar Usuario
                               </DropdownMenuItem>
                               <DropdownMenuItem className="text-red-600">
                                 <Trash2 className="h-4 w-4 mr-2" />
-                                Delete User
+                                Eliminar Usuario
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -327,12 +327,12 @@ export default function AdminDashboard() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>Course Management</CardTitle>
-                    <CardDescription>Manage all courses and content</CardDescription>
+                    <CardTitle>Gestión de Cursos</CardTitle>
+                    <CardDescription>Gestionar todos los cursos y contenido</CardDescription>
                   </div>
                   <Button>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Course
+                    Agregar Curso
                   </Button>
                 </div>
               </CardHeader>
@@ -340,12 +340,12 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Course</TableHead>
+                      <TableHead>Curso</TableHead>
                       <TableHead>Instructor</TableHead>
-                      <TableHead>Students</TableHead>
-                      <TableHead>Rating</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>Estudiantes</TableHead>
+                      <TableHead>Calificación</TableHead>
+                      <TableHead>Estado</TableHead>
+                      <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -354,7 +354,7 @@ export default function AdminDashboard() {
                         <TableCell>
                           <div>
                             <p className="font-medium">{course.title}</p>
-                            <p className="text-sm text-gray-600">Created {course.created}</p>
+                            <p className="text-sm text-gray-600">Creado {course.created}</p>
                           </div>
                         </TableCell>
                         <TableCell>{course.instructor}</TableCell>
@@ -375,15 +375,15 @@ export default function AdminDashboard() {
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem>
                                 <Eye className="h-4 w-4 mr-2" />
-                                View Course
+                                Ver Curso
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 <Edit className="h-4 w-4 mr-2" />
-                                Edit Course
+                                Editar Curso
                               </DropdownMenuItem>
                               <DropdownMenuItem className="text-red-600">
                                 <Trash2 className="h-4 w-4 mr-2" />
-                                Delete Course
+                                Eliminar Curso
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -400,23 +400,23 @@ export default function AdminDashboard() {
             <div className="grid lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>User Growth</CardTitle>
-                  <CardDescription>Monthly user registration trends</CardDescription>
+                  <CardTitle>Crecimiento de Usuarios</CardTitle>
+                  <CardDescription>Tendencias mensuales de registro de usuarios</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <p className="text-gray-500">Chart placeholder - User growth over time</p>
+                    <p className="text-gray-500">Gráfico - Crecimiento de usuarios en el tiempo</p>
                   </div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Revenue Analytics</CardTitle>
-                  <CardDescription>Monthly revenue and subscription metrics</CardDescription>
+                  <CardTitle>Análisis de Ingresos</CardTitle>
+                  <CardDescription>Métricas mensuales de ingresos y suscripciones</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <p className="text-gray-500">Chart placeholder - Revenue analytics</p>
+                    <p className="text-gray-500">Gráfico - Análisis de ingresos</p>
                   </div>
                 </CardContent>
               </Card>

@@ -15,19 +15,19 @@ export default function CoursesPage() {
   const [selectedLevel, setSelectedLevel] = useState("all")
 
   const categories = [
-    { value: "all", label: "All Categories" },
-    { value: "development", label: "Development" },
-    { value: "design", label: "Design" },
-    { value: "business", label: "Business" },
-    { value: "data-science", label: "Data Science" },
+    { value: "all", label: "Todas las Categorías" },
+    { value: "development", label: "Desarrollo" },
+    { value: "design", label: "Diseño" },
+    { value: "business", label: "Negocios" },
+    { value: "data-science", label: "Ciencia de Datos" },
     { value: "marketing", label: "Marketing" },
   ]
 
   const levels = [
-    { value: "all", label: "All Levels" },
-    { value: "beginner", label: "Beginner" },
-    { value: "intermediate", label: "Intermediate" },
-    { value: "advanced", label: "Advanced" },
+    { value: "all", label: "Todos los Niveles" },
+    { value: "beginner", label: "Principiante" },
+    { value: "intermediate", label: "Intermedio" },
+    { value: "advanced", label: "Avanzado" },
   ]
 
   const courses = [
@@ -141,7 +141,7 @@ export default function CoursesPage() {
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/dashboard" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
               <BookOpen className="h-8 w-8 text-blue-600" />
               <span className="text-2xl font-bold text-gray-900">LearnPro</span>
             </Link>
@@ -150,13 +150,13 @@ export default function CoursesPage() {
                 Dashboard
               </Link>
               <Link href="/courses" className="text-blue-600 font-medium">
-                Courses
+                Cursos
               </Link>
               <Link href="/progress" className="text-gray-600 hover:text-gray-900">
-                Progress
+                Progreso
               </Link>
               <Link href="/certificates" className="text-gray-600 hover:text-gray-900">
-                Certificates
+                Certificados
               </Link>
             </nav>
           </div>
@@ -166,9 +166,9 @@ export default function CoursesPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Explore Courses</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Explorar Cursos</h1>
           <p className="text-gray-600">
-            Discover new skills and advance your career with our comprehensive course library
+            Descubre nuevas habilidades y avanza en tu carrera con nuestra biblioteca completa de cursos
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function CoursesPage() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
-                    placeholder="Search courses, instructors, or topics..."
+                    placeholder="Buscar cursos, instructores o temas..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -189,7 +189,7 @@ export default function CoursesPage() {
               </div>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Category" />
+                  <SelectValue placeholder="Categoría" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
@@ -201,7 +201,7 @@ export default function CoursesPage() {
               </Select>
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
                 <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Level" />
+                  <SelectValue placeholder="Nivel" />
                 </SelectTrigger>
                 <SelectContent>
                   {levels.map((level) => (
@@ -218,7 +218,7 @@ export default function CoursesPage() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-600">
-            Showing {filteredCourses.length} of {courses.length} courses
+            Mostrando {filteredCourses.length} de {courses.length} cursos
           </p>
         </div>
 
@@ -254,7 +254,7 @@ export default function CoursesPage() {
                 </div>
                 <h3 className="font-bold text-lg mb-2 group-hover:text-blue-600 transition-colors">{course.title}</h3>
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">{course.description}</p>
-                <p className="text-sm text-gray-500 mb-4">by {course.instructor}</p>
+                <p className="text-sm text-gray-500 mb-4">por {course.instructor}</p>
 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-4 text-sm text-gray-600">
@@ -284,7 +284,7 @@ export default function CoursesPage() {
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-green-600">{course.price}</span>
                   <Link href={`/courses/${course.id}`}>
-                    <Button>Start Learning</Button>
+                    <Button>Comenzar a Aprender</Button>
                   </Link>
                 </div>
               </CardContent>
@@ -297,8 +297,8 @@ export default function CoursesPage() {
           <Card className="text-center py-12">
             <CardContent>
               <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No courses found</h3>
-              <p className="text-gray-600 mb-4">Try adjusting your search criteria or browse all courses</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No se encontraron cursos</h3>
+              <p className="text-gray-600 mb-4">Prueba ajustando tus criterios de búsqueda o navega todos los cursos</p>
               <Button
                 onClick={() => {
                   setSearchQuery("")
@@ -306,7 +306,7 @@ export default function CoursesPage() {
                   setSelectedLevel("all")
                 }}
               >
-                Clear Filters
+                Limpiar Filtros
               </Button>
             </CardContent>
           </Card>
