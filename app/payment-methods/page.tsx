@@ -21,22 +21,63 @@ function PaymentMethodsContent() {
     name: ''
   })
 
-  const [paymentMethods] = useState([
-    {
-      id: 1,
-      type: 'visa',
-      last4: '4242',
-      expiry: '12/25',
-      isDefault: true
-    },
-    {
-      id: 2,
-      type: 'mastercard',
-      last4: '8888',
-      expiry: '09/26',
-      isDefault: false
+  type PaymentMethod = {
+    id: number
+    type: string
+    last4: string
+    expiry: string
+    name: string
+    isDefault: boolean
+  }
+
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
+
+  // Funciones de formateo y validación
+  const formatCardNumber = (value: string) => {
+    // Remover todos los caracteres no numéricos
+    const cleanValue = value.replace(/\D/g, '')
+    
+    // Limitar a 16 dígitos máximo
+    const limitedValue = cleanValue.slice(0, 16)
+    
+    // Agregar espacios cada 4 dígitos
+    return limitedValue.replace(/(\d{4})(?=\d)/g, '$1 ')
+  }
+
+  const formatExpiry = (value: string) => {
+    // Remover caracteres no numéricos
+    const cleanValue = value.replace(/\D/g, '')
+    
+    // Limitar a 4 dígitos
+    const limitedValue = cleanValue.slice(0, 4)
+    
+    // Agregar / después del segundo dígito
+    if (limitedValue.length >= 2) {
+      return limitedValue.slice(0, 2) + '/' + limitedValue.slice(2)
     }
-  ])
+    
+    return limitedValue
+  }
+
+  const formatCVV = (value: string) => {
+    // Solo números, máximo 4 dígitos
+    return value.replace(/\D/g, '').slice(0, 4)
+  }
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatCardNumber(e.target.value)
+    setNewCard(prev => ({ ...prev, number: formattedValue }))
+  }
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatExpiry(e.target.value)
+    setNewCard(prev => ({ ...prev, expiry: formattedValue }))
+  }
+
+  const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatCVV(e.target.value)
+    setNewCard(prev => ({ ...prev, cvv: formattedValue }))
+  }
 
   const [billingHistory] = useState([
     {
@@ -63,15 +104,91 @@ function PaymentMethodsContent() {
   ])
 
   const handleAddCard = () => {
-    // Aquí iría la lógica para agregar la tarjeta
+    if (!newCard.name || !newCard.number || !newCard.expiry || !newCard.cvv) {
+      toast.error("Por favor completa todos los campos")
+      return
+    }
+
+    // Validar número de tarjeta
+    const cleanNumber = newCard.number.replace(/\s/g, '')
+    if (cleanNumber.length !== 16) {
+      return
+    }
+
+    if (!/^\d+$/.test(cleanNumber)) {
+      toast.error("El número de tarjeta solo debe contener números")
+      return
+    }
+
+    // Validar CVV
+    if (newCard.cvv.length < 3 || newCard.cvv.length > 4) {
+      return
+    }
+
+    if (!/^\d+$/.test(newCard.cvv)) {
+      toast.error("El CVV solo debe contener números")
+      return
+    }
+
+    // Validar fecha de expiración
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/
+    if (!expiryRegex.test(newCard.expiry)) {
+      toast.error("La fecha de expiración debe tener el formato MM/AA")
+      return
+    }
+
+    // Determinar el tipo de tarjeta basado en el número
+    const getCardType = (number: string) => {
+      if (number.startsWith('4')) return 'visa'
+      if (number.startsWith('5') || number.startsWith('2')) return 'mastercard'
+      return 'generic'
+    }
+
+    // Crear nueva tarjeta
+    const newPaymentMethod = {
+      id: Date.now(), // Generar ID único
+      type: getCardType(cleanNumber),
+      last4: cleanNumber.slice(-4),
+      expiry: newCard.expiry,
+      name: newCard.name,
+      isDefault: paymentMethods.length === 0 // Primera tarjeta es predeterminada
+    }
+
+    // Agregar a la lista
+    setPaymentMethods(prev => [...prev, newPaymentMethod])
     toast.success("Método de pago agregado correctamente")
     setShowAddCard(false)
     setNewCard({ number: '', expiry: '', cvv: '', name: '' })
   }
 
   const handleDeleteCard = (id: number) => {
-    // Aquí iría la lógica para eliminar la tarjeta
+    const cardToDelete = paymentMethods.find(method => method.id === id)
+    
+    if (cardToDelete?.isDefault && paymentMethods.length > 1) {
+      // Si es la predeterminada y hay más tarjetas, hacer predeterminada la siguiente
+      setPaymentMethods(prev => {
+        const filtered = prev.filter(method => method.id !== id)
+        if (filtered.length > 0) {
+          filtered[0].isDefault = true
+        }
+        return filtered
+      })
+    } else {
+      // Simplemente eliminar la tarjeta
+      setPaymentMethods(prev => prev.filter(method => method.id !== id))
+    }
+    
     toast.success("Método de pago eliminado")
+  }
+
+  const handleSetDefault = (id: number) => {
+    setPaymentMethods(prev => 
+      prev.map(method => ({
+        ...method,
+        isDefault: method.id === id
+      }))
+    )
+    toast.success("Tarjeta predeterminada actualizada")
   }
 
   const getCardIcon = (type: string) => {
@@ -162,8 +279,10 @@ function PaymentMethodsContent() {
                           id="cardNumber"
                           placeholder="1234 5678 9012 3456"
                           value={newCard.number}
-                          onChange={(e) => setNewCard(prev => ({ ...prev, number: e.target.value }))}
+                          onChange={handleCardNumberChange}
+                          maxLength={19} // 16 dígitos + 3 espacios
                         />
+                        <p className="text-xs text-gray-500">Exactamente 16 dígitos</p>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
@@ -172,8 +291,10 @@ function PaymentMethodsContent() {
                             id="expiry"
                             placeholder="MM/AA"
                             value={newCard.expiry}
-                            onChange={(e) => setNewCard(prev => ({ ...prev, expiry: e.target.value }))}
+                            onChange={handleExpiryChange}
+                            maxLength={5}
                           />
+                          <p className="text-xs text-gray-500">Formato: MM/AA</p>
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="cvv">CVV</Label>
@@ -181,8 +302,10 @@ function PaymentMethodsContent() {
                             id="cvv"
                             placeholder="123"
                             value={newCard.cvv}
-                            onChange={(e) => setNewCard(prev => ({ ...prev, cvv: e.target.value }))}
+                            onChange={handleCVVChange}
+                            maxLength={4}
                           />
+                          <p className="text-xs text-gray-500">3 o 4 dígitos</p>
                         </div>
                       </div>
                       <div className="flex space-x-2">
@@ -199,33 +322,47 @@ function PaymentMethodsContent() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              {paymentMethods.map((method) => (
-                <div key={method.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center space-x-4">
-                    {getCardIcon(method.type)}
-                    <div>
-                      <p className="font-medium">•••• •••• •••• {method.last4}</p>
-                      <p className="text-sm text-gray-600">Expira {method.expiry}</p>
-                    </div>
-                    {method.isDefault && (
-                      <Badge variant="secondary">Predeterminada</Badge>
-                    )}
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
-                      {method.isDefault ? 'Editar' : 'Predeterminada'}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleDeleteCard(method.id)}
-                      disabled={method.isDefault}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+              {paymentMethods.length === 0 ? (
+                <div className="text-center py-8">
+                  <CreditCard className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-2">No tienes métodos de pago agregados</p>
+                  <p className="text-sm text-gray-500">Agrega una tarjeta para realizar pagos</p>
                 </div>
-              ))}
+              ) : (
+                paymentMethods.map((method) => (
+                  <div key={method.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      {getCardIcon(method.type)}
+                      <div>
+                        <p className="font-medium">•••• •••• •••• {method.last4}</p>
+                        <p className="text-sm text-gray-600">Expira {method.expiry}</p>
+                        <p className="text-xs text-gray-500">{method.name}</p>
+                      </div>
+                      {method.isDefault && (
+                        <Badge variant="secondary">Predeterminada</Badge>
+                      )}
+                    </div>
+                    <div className="flex space-x-2">
+                      {!method.isDefault && (
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleSetDefault(method.id)}
+                        >
+                          Hacer predeterminada
+                        </Button>
+                      )}
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleDeleteCard(method.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
             </CardContent>
           </Card>
 

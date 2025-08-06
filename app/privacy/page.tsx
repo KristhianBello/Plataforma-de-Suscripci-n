@@ -20,7 +20,9 @@ import {
   Trash2,
   Lock,
   Smartphone,
-  AlertTriangle
+  AlertTriangle,
+  Monitor,
+  Tablet
 } from "lucide-react"
 import Link from "next/link"
 import { ProtectedRoute } from "@/components/protected-route"
@@ -44,10 +46,13 @@ function PrivacySecurityContent() {
     marketing: false
   })
 
-  const [activeSessions] = useState([
+  const [activeSessions, setActiveSessions] = useState([
     {
       id: 1,
       device: 'Chrome en Windows',
+      deviceType: 'desktop',
+      browser: 'Chrome',
+      os: 'Windows 11',
       location: 'Madrid, España',
       ip: '192.168.1.1',
       lastActive: 'Activo ahora',
@@ -56,6 +61,9 @@ function PrivacySecurityContent() {
     {
       id: 2,
       device: 'Safari en iPhone',
+      deviceType: 'mobile',
+      browser: 'Safari',
+      os: 'iOS 17.1',
       location: 'Madrid, España',
       ip: '192.168.1.5',
       lastActive: 'Hace 2 días',
@@ -64,12 +72,27 @@ function PrivacySecurityContent() {
     {
       id: 3,
       device: 'Firefox en Ubuntu',
+      deviceType: 'desktop',
+      browser: 'Firefox',
+      os: 'Ubuntu 22.04',
       location: 'Barcelona, España',
       ip: '10.0.0.1',
       lastActive: 'Hace 1 semana',
       current: false
     }
   ])
+
+  const getDeviceIcon = (deviceType: string) => {
+    switch (deviceType) {
+      case 'mobile':
+        return <Smartphone className="h-5 w-5 text-gray-600" />
+      case 'tablet':
+        return <Tablet className="h-5 w-5 text-gray-600" />
+      case 'desktop':
+      default:
+        return <Monitor className="h-5 w-5 text-gray-600" />
+    }
+  }
 
   const handlePasswordChange = () => {
     if (securityData.newPassword !== securityData.confirmPassword) {
@@ -82,7 +105,9 @@ function PrivacySecurityContent() {
   }
 
   const handleSessionRevoke = (sessionId: number) => {
-    // Aquí iría la lógica para cerrar la sesión
+    // Remover la sesión de la lista
+    setActiveSessions(prev => prev.filter(session => session.id !== sessionId))
+    // Aquí iría la lógica para cerrar la sesión en el servidor
     toast.success("Sesión cerrada correctamente")
   }
 
@@ -272,10 +297,10 @@ function PrivacySecurityContent() {
                   <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <Smartphone className="h-5 w-5 text-gray-600" />
+                        {getDeviceIcon(session.deviceType)}
                       </div>
                       <div>
-                        <p className="font-medium">{session.device}</p>
+                        <p className="font-medium">{session.browser} en {session.os}</p>
                         <p className="text-sm text-gray-600">
                           {session.location} • IP: {session.ip}
                         </p>
