@@ -6,7 +6,7 @@
 | Gonzalo Alexander Delgado Macias   | [@Alex-20kd]
 | Kristhian Augusto Bello Soledispa  | [@KristhianBello]
 | Carlos Alberto Delgado Campuzano   | [@carlos-73CK]
-
+| Alex Fabricio Anchundia Mero       | [@AlexAnchundia] 
 
 
 # 📚 Documentación de la API
