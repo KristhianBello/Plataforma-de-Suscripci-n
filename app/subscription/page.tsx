@@ -26,52 +26,52 @@ export default function SubscriptionPage() {
   const plans = [
     {
       id: "free",
-      name: "Free",
-      description: "Perfect for getting started",
+      name: "Gratis",
+      description: "Perfecto para comenzar",
       price: { monthly: 0, annual: 0 },
-      features: ["Access to 10 free courses", "Basic progress tracking", "Community forum access", "Mobile app access"],
-      limitations: ["Limited course selection", "No certificates", "No offline downloads"],
+      features: ["Acceso a 10 cursos gratuitos", "Seguimiento básico del progreso", "Acceso al foro de la comunidad", "Acceso a la aplicación móvil"],
+      limitations: ["Selección limitada de cursos", "Sin certificados", "Sin descargas offline"],
       popular: false,
-      buttonText: "Current Plan",
+      buttonText: "Plan Actual",
       buttonVariant: "outline" as const,
     },
     {
       id: "monthly",
-      name: "Monthly Pro",
-      description: "Full access with monthly billing",
+      name: "Pro Mensual",
+      description: "Acceso completo con facturación mensual",
       price: { monthly: 18, annual: 18 },
       features: [
-        "Access to all 500+ courses",
-        "Detailed progress analytics",
-        "Certificates of completion",
-        "Priority community support",
-        "Mobile app with offline downloads",
-        "1-on-1 instructor Q&A sessions",
+        "Acceso a todos los 500+ cursos",
+        "Análisis detallado del progreso",
+        "Certificados de finalización",
+        "Soporte prioritario de la comunidad",
+        "Aplicación móvil con descargas offline",
+        "Sesiones individuales de Q&A con instructores",
       ],
       limitations: [],
       popular: false,
-      buttonText: "Upgrade to Monthly",
+      buttonText: "Actualizar a Mensual",
       buttonVariant: "default" as const,
     },
     {
       id: "annual",
-      name: "Annual Pro",
-      description: "Best value with annual billing",
+      name: "Pro Anual",
+      description: "Mejor valor con facturación anual",
       price: { monthly: 6.67, annual: 80 },
       originalPrice: { annual: 216 },
       features: [
-        "Access to all 500+ courses",
-        "Detailed progress analytics",
-        "Certificates of completion",
-        "Premium 24/7 support",
-        "Mobile app with offline downloads",
-        "1-on-1 instructor Q&A sessions",
-        "Early access to new courses",
-        "Exclusive webinars and events",
+        "Acceso a todos los 500+ cursos",
+        "Análisis detallado del progreso",
+        "Certificados de finalización",
+        "Soporte premium 24/7",
+        "Aplicación móvil con descargas offline",
+        "Sesiones individuales de Q&A con instructores",
+        "Acceso temprano a nuevos cursos",
+        "Webinars y eventos exclusivos",
       ],
       limitations: [],
       popular: true,
-      buttonText: "Upgrade to Annual",
+      buttonText: "Actualizar a Anual",
       buttonVariant: "default" as const,
     },
   ]
@@ -79,7 +79,7 @@ export default function SubscriptionPage() {
   const paymentMethods = [
     {
       id: "stripe",
-      name: "Credit/Debit Card",
+      name: "Tarjeta de Crédito/Débito",
       description: "Visa, Mastercard, American Express",
       icon: CreditCard,
       available: true,
@@ -87,7 +87,7 @@ export default function SubscriptionPage() {
     {
       id: "paypal",
       name: "PayPal",
-      description: "Pay with your PayPal account",
+      description: "Paga con tu cuenta de PayPal",
       icon: CreditCard,
       available: true,
     },
@@ -133,13 +133,13 @@ export default function SubscriptionPage() {
               </Link>
               <nav className="hidden md:flex items-center space-x-6">
                 <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
-                  Dashboard
+                  Panel
                 </Link>
                 <Link href="/courses" className="text-gray-600 hover:text-gray-900">
-                  Courses
+                  Cursos
                 </Link>
                 <Link href="/subscription" className="text-blue-600 font-medium">
-                  Subscription
+                  Suscripción
                 </Link>
               </nav>
             </div>
@@ -149,18 +149,18 @@ export default function SubscriptionPage() {
         <div className="container mx-auto px-4 py-8">
           {/* Page Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Learning Plan</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Elige Tu Plan de Aprendizaje</h1>
             <p className="text-xl text-gray-600 mb-8">
-              Unlock your potential with unlimited access to our course library
+              Desbloquea tu potencial con acceso ilimitado a nuestra biblioteca de cursos
             </p>
 
             {/* Billing Toggle */}
             <div className="flex items-center justify-center space-x-4 mb-8">
-              <span className={`text-sm ${!isAnnual ? "font-medium" : "text-gray-600"}`}>Monthly</span>
+              <span className={`text-sm ${!isAnnual ? "font-medium" : "text-gray-600"}`}>Mensual</span>
               <Switch checked={isAnnual} onCheckedChange={setIsAnnual} />
-              <span className={`text-sm ${isAnnual ? "font-medium" : "text-gray-600"}`}>Annual</span>
+              <span className={`text-sm ${isAnnual ? "font-medium" : "text-gray-600"}`}>Anual</span>
               <Badge variant="secondary" className="ml-2">
-                Save 63%
+                Ahorra 63%
               </Badge>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function SubscriptionPage() {
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600">
                     <Crown className="h-3 w-3 mr-1" />
-                    Most Popular
+                    Más Popular
                   </Badge>
                 )}
 
@@ -187,20 +187,20 @@ export default function SubscriptionPage() {
 
                   <div className="mt-4">
                     {plan.price.monthly === 0 ? (
-                      <div className="text-4xl font-bold text-gray-900">Free</div>
+                      <div className="text-4xl font-bold text-gray-900">Gratis</div>
                     ) : (
                       <div>
                         <div className="text-4xl font-bold text-gray-900">
                           ${isAnnual ? plan.price.annual : plan.price.monthly}
-                          {!isAnnual && <span className="text-lg text-gray-600">/month</span>}
-                          {isAnnual && <span className="text-lg text-gray-600">/year</span>}
+                          {!isAnnual && <span className="text-lg text-gray-600">/mes</span>}
+                          {isAnnual && <span className="text-lg text-gray-600">/año</span>}
                         </div>
                         {plan.originalPrice && isAnnual && (
-                          <div className="text-sm text-gray-500 line-through">${plan.originalPrice.annual}/year</div>
+                          <div className="text-sm text-gray-500 line-through">${plan.originalPrice.annual}/año</div>
                         )}
                         {isAnnual && plan.price.monthly < 18 && (
                           <div className="text-sm text-green-600 font-medium">
-                            ${plan.price.monthly}/month when billed annually
+                            ${plan.price.monthly}/mes cuando se factura anualmente
                           </div>
                         )}
                       </div>
@@ -233,7 +233,7 @@ export default function SubscriptionPage() {
                     disabled={currentPlan === plan.id}
                     onClick={() => handlePlanSelect(plan.id)}
                   >
-                    {currentPlan === plan.id ? "Current Plan" : plan.buttonText}
+                    {currentPlan === plan.id ? "Plan Actual" : plan.buttonText}
                   </Button>
                 </CardContent>
               </Card>
@@ -243,34 +243,34 @@ export default function SubscriptionPage() {
           {/* Features Comparison */}
           <Card className="mb-12">
             <CardHeader>
-              <CardTitle>Compare Plans</CardTitle>
-              <CardDescription>See what's included in each plan</CardDescription>
+              <CardTitle>Comparar Planes</CardTitle>
+              <CardDescription>Ve qué está incluido en cada plan</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b">
-                      <th className="text-left py-3 px-4">Features</th>
-                      <th className="text-center py-3 px-4">Free</th>
-                      <th className="text-center py-3 px-4">Monthly Pro</th>
-                      <th className="text-center py-3 px-4">Annual Pro</th>
+                      <th className="text-left py-3 px-4">Características</th>
+                      <th className="text-center py-3 px-4">Gratis</th>
+                      <th className="text-center py-3 px-4">Pro Mensual</th>
+                      <th className="text-center py-3 px-4">Pro Anual</th>
                     </tr>
                   </thead>
                   <tbody className="text-sm">
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
                         <BookOpen className="h-4 w-4 mr-2 text-gray-600" />
-                        Course Access
+                        Acceso a Cursos
                       </td>
-                      <td className="text-center py-3 px-4">10 courses</td>
-                      <td className="text-center py-3 px-4">500+ courses</td>
-                      <td className="text-center py-3 px-4">500+ courses</td>
+                      <td className="text-center py-3 px-4">10 cursos</td>
+                      <td className="text-center py-3 px-4">500+ cursos</td>
+                      <td className="text-center py-3 px-4">500+ cursos</td>
                     </tr>
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
                         <Award className="h-4 w-4 mr-2 text-gray-600" />
-                        Certificates
+                        Certificados
                       </td>
                       <td className="text-center py-3 px-4">❌</td>
                       <td className="text-center py-3 px-4">✅</td>
@@ -279,7 +279,7 @@ export default function SubscriptionPage() {
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
                         <Download className="h-4 w-4 mr-2 text-gray-600" />
-                        Offline Downloads
+                        Descargas Offline
                       </td>
                       <td className="text-center py-3 px-4">❌</td>
                       <td className="text-center py-3 px-4">✅</td>
@@ -288,19 +288,19 @@ export default function SubscriptionPage() {
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
                         <Smartphone className="h-4 w-4 mr-2 text-gray-600" />
-                        Mobile App
+                        Aplicación Móvil
                       </td>
-                      <td className="text-center py-3 px-4">Basic</td>
-                      <td className="text-center py-3 px-4">Full Access</td>
-                      <td className="text-center py-3 px-4">Full Access</td>
+                      <td className="text-center py-3 px-4">Básica</td>
+                      <td className="text-center py-3 px-4">Acceso Completo</td>
+                      <td className="text-center py-3 px-4">Acceso Completo</td>
                     </tr>
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
                         <Headphones className="h-4 w-4 mr-2 text-gray-600" />
-                        Support
+                        Soporte
                       </td>
-                      <td className="text-center py-3 px-4">Community</td>
-                      <td className="text-center py-3 px-4">Priority</td>
+                      <td className="text-center py-3 px-4">Comunidad</td>
+                      <td className="text-center py-3 px-4">Prioritario</td>
                       <td className="text-center py-3 px-4">Premium</td>
                     </tr>
                   </tbody>
@@ -312,8 +312,8 @@ export default function SubscriptionPage() {
           {/* Payment Methods */}
           <Card className="mb-12">
             <CardHeader>
-              <CardTitle>Secure Payment Methods</CardTitle>
-              <CardDescription>We accept all major payment methods</CardDescription>
+              <CardTitle>Métodos de Pago Seguros</CardTitle>
+              <CardDescription>Aceptamos todos los métodos de pago principales</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-4">
@@ -328,8 +328,8 @@ export default function SubscriptionPage() {
                 ))}
               </div>
               <div className="mt-6 text-center text-sm text-gray-600">
-                <p>🔒 All payments are secured with 256-bit SSL encryption</p>
-                <p className="mt-2">30-day money-back guarantee • Cancel anytime</p>
+                <p>🔒 Todos los pagos están asegurados con encriptación SSL de 256 bits</p>
+                <p className="mt-2">Garantía de devolución de 30 días • Cancela en cualquier momento</p>
               </div>
             </CardContent>
           </Card>
@@ -337,35 +337,32 @@ export default function SubscriptionPage() {
           {/* FAQ */}
           <Card>
             <CardHeader>
-              <CardTitle>Frequently Asked Questions</CardTitle>
+              <CardTitle>Preguntas Frecuentes</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-medium mb-2">Can I cancel my subscription anytime?</h3>
+                  <h3 className="font-medium mb-2">¿Puedo cancelar mi suscripción en cualquier momento?</h3>
                   <p className="text-sm text-gray-600">
-                    Yes, you can cancel your subscription at any time. You'll continue to have access until the end of
-                    your billing period.
+                    Sí, puedes cancelar tu suscripción en cualquier momento. Continuarás teniendo acceso hasta el final de tu período de facturación.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-medium mb-2">Do you offer refunds?</h3>
+                  <h3 className="font-medium mb-2">¿Ofrecen reembolsos?</h3>
                   <p className="text-sm text-gray-600">
-                    We offer a 30-day money-back guarantee. If you're not satisfied, contact us for a full refund.
+                    Ofrecemos una garantía de devolución de dinero de 30 días. Si no estás satisfecho, contáctanos para un reembolso completo.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-medium mb-2">Can I switch between plans?</h3>
+                  <h3 className="font-medium mb-2">¿Puedo cambiar entre planes?</h3>
                   <p className="text-sm text-gray-600">
-                    Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next
-                    billing cycle.
+                    Sí, puedes actualizar o cambiar tu plan en cualquier momento. Los cambios se reflejarán en tu próximo ciclo de facturación.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-medium mb-2">Are there any hidden fees?</h3>
+                  <h3 className="font-medium mb-2">¿Hay tarifas ocultas?</h3>
                   <p className="text-sm text-gray-600">
-                    No, the price you see is the price you pay. There are no setup fees, hidden charges, or additional
-                    costs.
+                    No, el precio que ves es el precio que pagas. No hay tarifas de configuración, cargos ocultos o costos adicionales.
                   </p>
                 </div>
               </div>
@@ -377,9 +374,9 @@ export default function SubscriptionPage() {
         <Dialog open={showPayment} onOpenChange={setShowPayment}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Complete Your Subscription</DialogTitle>
+              <DialogTitle>Completa Tu Suscripción</DialogTitle>
               <DialogDescription>
-                {selectedPlan && `You're subscribing to the ${selectedPlan.name} plan.`}
+                {selectedPlan && `Te estás suscribiendo al plan ${selectedPlan.name}.`}
               </DialogDescription>
             </DialogHeader>
             {selectedPlan && (

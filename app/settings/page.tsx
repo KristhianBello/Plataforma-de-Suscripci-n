@@ -20,15 +20,19 @@ import {
   Settings,
   Smartphone,
   Download,
-  Trash2
+  Trash2,
+  LogOut
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
 import { ProtectedRoute } from "@/components/protected-route"
 import { toast } from "sonner"
+import { supabase } from '@/lib/supabase'
 
 function SettingsContent() {
   const { user } = useAuth()
+  const router = useRouter()
   
   const [quickSettings, setQuickSettings] = useState({
     notifications: true,
@@ -36,6 +40,23 @@ function SettingsContent() {
     autoPlay: true,
     emailUpdates: true
   })
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      
+      if (error) {
+        toast.error("Error al cerrar sesión: " + error.message)
+        return
+      }
+
+      toast.success("Sesión cerrada correctamente")
+      router.push("/login")
+    } catch (error) {
+      console.error('Error during logout:', error)
+      toast.error("Error inesperado al cerrar sesión")
+    }
+  }
 
   const settingsCategories = [
     {
@@ -264,7 +285,22 @@ function SettingsContent() {
                         </div>
                       </div>
                     </Button>
-                    <Button variant="outline" className="justify-start h-auto p-4">
+                    <Button 
+                      variant="outline" 
+                      className="justify-start h-auto p-4 border-orange-200 hover:bg-orange-50"
+                      onClick={handleLogout}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <LogOut className="h-5 w-5 text-orange-600" />
+                        <div className="text-left">
+                          <p className="font-medium text-orange-600">Cerrar Sesión</p>
+                          <p className="text-xs text-gray-600">Salir de tu cuenta</p>
+                        </div>
+                      </div>
+                    </Button>
+                  </div>
+                  <div className="mt-4">
+                    <Button variant="outline" className="justify-start h-auto p-4 w-full">
                       <div className="flex items-center space-x-3">
                         <Settings className="h-5 w-5 text-gray-600" />
                         <div className="text-left">

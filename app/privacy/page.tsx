@@ -27,10 +27,12 @@ import {
 import Link from "next/link"
 import { ProtectedRoute } from "@/components/protected-route"
 import { toast } from "sonner"
+import { supabase } from '@/lib/supabase'
 
 function PrivacySecurityContent() {
   const [showPassword, setShowPassword] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
   
   const [securityData, setSecurityData] = useState({
     currentPassword: '',
@@ -94,14 +96,57 @@ function PrivacySecurityContent() {
     }
   }
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
+    // Validaciones básicas
+    if (!securityData.currentPassword || !securityData.newPassword || !securityData.confirmPassword) {
+      toast.error("Por favor completa todos los campos")
+      return
+    }
+
     if (securityData.newPassword !== securityData.confirmPassword) {
       toast.error("Las contraseñas no coinciden")
       return
     }
-    // Aquí iría la lógica para cambiar la contraseña
-    toast.success("Contraseña actualizada correctamente")
-    setSecurityData(prev => ({ ...prev, currentPassword: '', newPassword: '', confirmPassword: '' }))
+
+    // Validar longitud mínima de la nueva contraseña
+    if (securityData.newPassword.length < 6) {
+      toast.error("La nueva contraseña debe tener al menos 6 caracteres")
+      return
+    }
+
+    setIsUpdatingPassword(true)
+
+    try {
+      // Actualizar contraseña en Supabase
+      const { error } = await supabase.auth.updateUser({
+        password: securityData.newPassword
+      })
+
+      if (error) {
+        // Manejar diferentes tipos de errores
+        if (error.message.includes('password')) {
+          toast.error("Error al actualizar la contraseña. Verifica tu contraseña actual.")
+        } else {
+          toast.error("Error al actualizar la contraseña: " + error.message)
+        }
+        return
+      }
+
+      // Éxito
+      toast.success("Contraseña actualizada correctamente")
+      setSecurityData(prev => ({ 
+        ...prev, 
+        currentPassword: '', 
+        newPassword: '', 
+        confirmPassword: '' 
+      }))
+
+    } catch (error) {
+      console.error('Error updating password:', error)
+      toast.error("Error inesperado al actualizar la contraseña")
+    } finally {
+      setIsUpdatingPassword(false)
+    }
   }
 
   const handleSessionRevoke = (sessionId: number) => {
@@ -198,6 +243,9 @@ function PrivacySecurityContent() {
                       value={securityData.newPassword}
                       onChange={(e) => setSecurityData(prev => ({ ...prev, newPassword: e.target.value }))}
                     />
+                    {securityData.newPassword && securityData.newPassword.length < 6 && (
+                      <p className="text-xs text-red-600">La contraseña debe tener al menos 6 caracteres</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
@@ -207,8 +255,19 @@ function PrivacySecurityContent() {
                       value={securityData.confirmPassword}
                       onChange={(e) => setSecurityData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                     />
+                    {securityData.confirmPassword && securityData.newPassword !== securityData.confirmPassword && (
+                      <p className="text-xs text-red-600">Las contraseñas no coinciden</p>
+                    )}
+                    {securityData.confirmPassword && securityData.newPassword === securityData.confirmPassword && securityData.newPassword.length >= 6 && (
+                      <p className="text-xs text-green-600">Las contraseñas coinciden</p>
+                    )}
                   </div>
-                  <Button onClick={handlePasswordChange}>Actualizar contraseña</Button>
+                  <Button 
+                    onClick={handlePasswordChange}
+                    disabled={isUpdatingPassword}
+                  >
+                    {isUpdatingPassword ? "Actualizando..." : "Actualizar contraseña"}
+                  </Button>
                 </div>
               </div>
 

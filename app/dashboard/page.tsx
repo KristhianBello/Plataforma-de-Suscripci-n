@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -21,6 +21,59 @@ import {
 function DashboardContent() {
   const [searchQuery, setSearchQuery] = useState("")
   const { user, signOut } = useAuth()
+
+  // Estado para el plan de suscripción actual
+  const [currentPlan, setCurrentPlan] = useState("free") // Plan básico por defecto hasta que el usuario se suscriba
+
+  // Cargar el plan del usuario desde la base de datos
+  useEffect(() => {
+    // En una implementación real, esto cargaría el plan desde Supabase
+    // Por ejemplo: si el usuario tiene subscription_plan en su metadata
+    if (user?.user_metadata?.subscription_plan) {
+      setCurrentPlan(user.user_metadata.subscription_plan)
+    }
+    // También podrías hacer una consulta a tu tabla de suscripciones:
+    // const { data: subscription } = await supabase
+    //   .from('subscriptions')
+    //   .select('plan_type')
+    //   .eq('user_id', user.id)
+    //   .single()
+    // if (subscription) setCurrentPlan(subscription.plan_type)
+  }, [user])
+
+  // Configuración de planes
+  const planConfig = {
+    free: {
+      name: "Plan Básico",
+      displayName: "Básico",
+      description: "Acceso limitado a cursos básicos",
+      color: "bg-gray-100 text-gray-600",
+      features: ["10 cursos gratuitos", "Progreso básico", "Soporte comunitario"]
+    },
+    monthly: {
+      name: "Plan Mensual Pro",
+      displayName: "Pro Mensual",
+      description: "Acceso completo con facturación mensual",
+      color: "bg-blue-100 text-blue-600",
+      features: ["Todos los cursos", "Certificados", "Soporte prioritario"]
+    },
+    premium: {
+      name: "Plan Premium",
+      displayName: "Premium",
+      description: "Acceso completo a todos los cursos",
+      color: "bg-purple-100 text-purple-600",
+      features: ["Acceso ilimitado", "Certificados premium", "Soporte 24/7", "Contenido exclusivo"]
+    },
+    annual: {
+      name: "Plan Anual Pro",
+      displayName: "Pro Anual",
+      description: "Mejor valor con facturación anual",
+      color: "bg-gold-100 text-gold-600",
+      features: ["Todos los cursos", "Descuento anual", "Acceso anticipado", "Webinars exclusivos"]
+    }
+  }
+
+  const currentPlanInfo = planConfig[currentPlan as keyof typeof planConfig] || planConfig.free
 
   // Estado para las notificaciones
   const [notifications, setNotifications] = useState([
@@ -259,7 +312,12 @@ function DashboardContent() {
                        user?.email?.split('@')[0] || 
                        'Usuario'}
                     </h3>
-                    <p className="text-sm text-gray-600">Miembro Premium</p>
+                    <p className="text-sm text-gray-600">
+                      {currentPlan === "free" ? "Miembro Básico" : 
+                       currentPlan === "monthly" ? "Miembro Pro" :
+                       currentPlan === "annual" ? "Miembro Pro Anual" :
+                       "Miembro Premium"}
+                    </p>
                   </div>
                 </div>
               </CardHeader>
@@ -310,12 +368,37 @@ function DashboardContent() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="text-center">
-                    <Badge variant="secondary" className="mb-2">Plan Premium</Badge>
-                    <p className="text-sm text-gray-600">Acceso completo a todos los cursos</p>
+                    <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium mb-2 ${currentPlanInfo.color}`}>
+                      {currentPlanInfo.displayName}
+                    </div>
+                    <p className="text-sm text-gray-600">{currentPlanInfo.description}</p>
                   </div>
+                  
+                  {/* Características del plan */}
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-gray-700">Incluye:</h4>
+                    <div className="space-y-1">
+                      {currentPlanInfo.features.map((feature, index) => (
+                        <div key={index} className="flex items-center space-x-2">
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                          <span className="text-xs text-gray-600">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Estado del plan */}
+                  {currentPlan === "free" && (
+                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-xs text-blue-700 font-medium">
+                        ¡Suscríbete para acceder a todos los cursos!
+                      </p>
+                    </div>
+                  )}
+
                   <Link href="/subscription">
                     <Button variant="outline" className="w-full">
-                      Gestionar Suscripción
+                      {currentPlan === "free" ? "Suscribirse Ahora" : "Gestionar Suscripción"}
                     </Button>
                   </Link>
                 </div>

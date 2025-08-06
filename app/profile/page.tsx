@@ -26,7 +26,37 @@ function ProfileContent() {
     location: ''
   })
 
+  // Función para formatear el número de teléfono
+  const formatPhoneNumber = (value: string) => {
+    // Remover todos los caracteres no numéricos
+    const cleanValue = value.replace(/\D/g, '')
+    
+    // Limitar a 10 dígitos máximo
+    const limitedValue = cleanValue.slice(0, 10)
+    
+    // Formatear como (XXX) XXX-XXXX
+    if (limitedValue.length >= 6) {
+      return `(${limitedValue.slice(0, 3)}) ${limitedValue.slice(3, 6)}-${limitedValue.slice(6)}`
+    } else if (limitedValue.length >= 3) {
+      return `(${limitedValue.slice(0, 3)}) ${limitedValue.slice(3)}`
+    } else {
+      return limitedValue
+    }
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatPhoneNumber(e.target.value)
+    setProfileData(prev => ({ ...prev, phone: formattedValue }))
+  }
+
   const handleSave = () => {
+    // Validar teléfono antes de guardar
+    const cleanPhone = profileData.phone.replace(/\D/g, '')
+    if (profileData.phone && cleanPhone.length !== 10) {
+      toast.error("El número de teléfono debe tener exactamente 10 dígitos")
+      return
+    }
+
     // Aquí iría la lógica para guardar el perfil
     toast.success("Perfil actualizado correctamente")
   }
@@ -135,9 +165,12 @@ function ProfileContent() {
                   <Label htmlFor="phone">Teléfono</Label>
                   <Input
                     id="phone"
+                    placeholder="(123) 456-7890"
                     value={profileData.phone}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
+                    onChange={handlePhoneChange}
+                    maxLength={14} // (XXX) XXX-XXXX formato
                   />
+                  <p className="text-xs text-gray-500">Exactamente 10 dígitos</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="website">Sitio web</Label>
