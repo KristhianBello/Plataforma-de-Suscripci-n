@@ -27,7 +27,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
     },
     description:
       "Master React from basics to advanced concepts with hands-on projects. This comprehensive course covers everything you need to know to become a proficient React developer.",
-    thumbnail: "/placeholder.svg?height=400&width=600",
+    thumbnail: "/courses/curso111.jpg",
     category: "Development",
     level: "Intermediate",
     rating: 4.8,

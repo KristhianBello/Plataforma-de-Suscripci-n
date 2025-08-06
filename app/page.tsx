@@ -68,7 +68,7 @@ function HomeContent() {
           </div>
           <div className="mt-12">
             <Image
-              src="/placeholder.svg?height=400&width=800"
+              src="/courses/programacionN.jpg"
               alt="LearnPro Dashboard"
               width={800}
               height={400}
