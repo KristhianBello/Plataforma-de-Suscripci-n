@@ -22,6 +22,54 @@ function DashboardContent() {
   const [searchQuery, setSearchQuery] = useState("")
   const { user, signOut } = useAuth()
 
+  // Estado para las notificaciones
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "Nuevo curso disponible",
+      message: "El curso 'Advanced TypeScript' ya está disponible",
+      time: "Hace 5 minutos",
+      read: false,
+      type: "course"
+    },
+    {
+      id: 2,
+      title: "Lección completada",
+      message: "Has completado 'React Hooks Avanzados'",
+      time: "Hace 1 hora",
+      read: false,
+      type: "achievement"
+    },
+    {
+      id: 3,
+      title: "Recordatorio de sesión",
+      message: "Tu próxima clase comienza en 30 minutos",
+      time: "Hace 2 horas",
+      read: true,
+      type: "reminder"
+    },
+    {
+      id: 4,
+      title: "Certificado generado",
+      message: "Tu certificado de 'UI/UX Design' está listo para descargar",
+      time: "Hace 1 día",
+      read: false,
+      type: "certificate"
+    }
+  ])
+
+  const unreadCount = notifications.filter(n => !n.read).length
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+  }
+
+  const markAsRead = (id: number) => {
+    setNotifications(prev => prev.map(n => 
+      n.id === id ? { ...n, read: true } : n
+    ))
+  }
+
   const recentCourses = [
     {
       id: 1,
@@ -91,12 +139,73 @@ function DashboardContent() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Settings className="h-4 w-4" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative">
+                    <Bell className="h-4 w-4" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80" align="end" forceMount>
+                  <div className="flex items-center justify-between p-4 border-b">
+                    <h3 className="font-semibold">Notificaciones</h3>
+                    {unreadCount > 0 && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={markAllAsRead}
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        Marcar todas como leídas
+                      </Button>
+                    )}
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-4 text-center text-gray-500">
+                        No tienes notificaciones
+                      </div>
+                    ) : (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${
+                            !notification.read ? 'bg-blue-50' : ''
+                          }`}
+                          onClick={() => markAsRead(notification.id)}
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className={`w-2 h-2 rounded-full mt-2 ${
+                              !notification.read ? 'bg-blue-600' : 'bg-gray-300'
+                            }`} />
+                            <div className="flex-1">
+                              <p className="font-medium text-sm">{notification.title}</p>
+                              <p className="text-sm text-gray-600">{notification.message}</p>
+                              <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  {notifications.length > 0 && (
+                    <div className="p-2 border-t">
+                      <Button variant="ghost" className="w-full text-sm">
+                        Ver todas las notificaciones
+                      </Button>
+                    </div>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Link href="/settings">
+                <Button variant="ghost" size="sm">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -193,6 +302,25 @@ function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
+
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="text-lg">Mi Suscripción</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <Badge variant="secondary" className="mb-2">Plan Premium</Badge>
+                    <p className="text-sm text-gray-600">Acceso completo a todos los cursos</p>
+                  </div>
+                  <Link href="/subscription">
+                    <Button variant="outline" className="w-full">
+                      Gestionar Suscripción
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Main Content */}
@@ -234,13 +362,7 @@ function DashboardContent() {
             {/* Continue Learning */}
             <Card className="mb-8">
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Continuar Aprendiendo</CardTitle>
-                  <Button variant="outline" size="sm">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filtrar
-                  </Button>
-                </div>
+                <CardTitle>Mis Cursos</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -282,8 +404,17 @@ function DashboardContent() {
             {/* Recommended Courses */}
             <Card>
               <CardHeader>
-                <CardTitle>Recomendado para Ti</CardTitle>
-                <CardDescription>Basado en tu historial de aprendizaje y preferencias</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Recomendado para Ti</CardTitle>
+                    <CardDescription>Basado en tu historial de aprendizaje y preferencias</CardDescription>
+                  </div>
+                  <Link href="/courses">
+                    <Button variant="outline" size="sm">
+                      Ver más
+                    </Button>
+                  </Link>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
