@@ -43,7 +43,8 @@ export default function CoursesPage() {
       students: 12543,
       duration: "42 hours",
       lessons: 156,
-      price: "Free with subscription",
+      price: 49.99,
+      originalPrice: 79.99,
       tags: ["React", "JavaScript", "Frontend"],
     },
     {
@@ -58,7 +59,8 @@ export default function CoursesPage() {
       students: 8932,
       duration: "28 hours",
       lessons: 89,
-      price: "Free with subscription",
+      price: 39.99,
+      originalPrice: 59.99,
       tags: ["UI/UX", "Design", "Figma"],
     },
     {
@@ -73,7 +75,8 @@ export default function CoursesPage() {
       students: 15678,
       duration: "65 hours",
       lessons: 234,
-      price: "Free with subscription",
+      price: 69.99,
+      originalPrice: 99.99,
       tags: ["Python", "Data Science", "Machine Learning"],
     },
     {
@@ -88,7 +91,8 @@ export default function CoursesPage() {
       students: 9876,
       duration: "35 hours",
       lessons: 128,
-      price: "Free with subscription",
+      price: 44.99,
+      originalPrice: 69.99,
       tags: ["Marketing", "SEO", "Social Media"],
     },
     {
@@ -103,7 +107,8 @@ export default function CoursesPage() {
       students: 6543,
       duration: "48 hours",
       lessons: 167,
-      price: "Free with subscription",
+      price: 59.99,
+      originalPrice: 89.99,
       tags: ["Business", "Strategy", "Leadership"],
     },
     {
@@ -118,7 +123,8 @@ export default function CoursesPage() {
       students: 11234,
       duration: "38 hours",
       lessons: 142,
-      price: "Free with subscription",
+      price: 54.99,
+      originalPrice: 79.99,
       tags: ["JavaScript", "Advanced", "Performance"],
     },
   ]
@@ -282,9 +288,18 @@ export default function CoursesPage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-green-600">{course.price}</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-semibold text-green-600 text-lg">
+                      ${course.price}
+                    </span>
+                    {course.originalPrice && (
+                      <span className="text-sm text-gray-500 line-through">
+                        ${course.originalPrice}
+                      </span>
+                    )}
+                  </div>
                   <Link href={`/courses/${course.id}`}>
-                    <Button>Comenzar a Aprender</Button>
+                    <Button>Ver Curso</Button>
                   </Link>
                 </div>
               </CardContent>

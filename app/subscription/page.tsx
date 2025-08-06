@@ -5,11 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { BookOpen, Check, Crown, CreditCard, Award, Download, Smartphone, Headphones } from "lucide-react"
 import Link from "next/link"
-import StripePayment from "@/components/payments/stripe-payment"
-import PayPalPayment from "@/components/payments/paypal-payment"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
 import { ProtectedRoute } from "@/components/protected-route"
 import { toast } from "sonner"
@@ -20,9 +18,8 @@ export const dynamic = 'force-dynamic'
 export default function SubscriptionPage() {
   const [isAnnual, setIsAnnual] = useState(false)
   const [currentPlan, setCurrentPlan] = useState("free") // free, monthly, annual
-  const [showPayment, setShowPayment] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState<any>(null)
   const { user } = useAuth()
+  const router = useRouter()
 
   const plans = [
     {
@@ -37,42 +34,23 @@ export default function SubscriptionPage() {
       buttonVariant: "outline" as const,
     },
     {
-      id: "monthly",
-      name: "Pro Mensual",
-      description: "Acceso completo con facturación mensual",
-      price: { monthly: 18, annual: 18 },
+      id: "pro",
+      name: isAnnual ? "Pro Anual" : "Pro Mensual",
+      description: isAnnual ? "Mejor valor con facturación anual" : "Acceso completo con facturación mensual",
+      price: { monthly: isAnnual ? 6.67 : 18, annual: isAnnual ? 80 : 216 },
+      originalPrice: isAnnual ? { annual: 216 } : undefined,
       features: [
         "Acceso a todos los 500+ cursos",
         "Análisis detallado del progreso",
         "Certificados de finalización",
-        "Soporte prioritario de la comunidad",
+        isAnnual ? "Soporte premium 24/7" : "Soporte prioritario de la comunidad",
         "Aplicación móvil con descargas offline",
         "Sesiones individuales de Q&A con instructores",
+        ...(isAnnual ? ["Acceso temprano a nuevos cursos", "Webinars y eventos exclusivos"] : [])
       ],
       limitations: [],
-      popular: false,
-      buttonText: "Actualizar a Mensual",
-      buttonVariant: "default" as const,
-    },
-    {
-      id: "annual",
-      name: "Pro Anual",
-      description: "Mejor valor con facturación anual",
-      price: { monthly: 6.67, annual: 80 },
-      originalPrice: { annual: 216 },
-      features: [
-        "Acceso a todos los 500+ cursos",
-        "Análisis detallado del progreso",
-        "Certificados de finalización",
-        "Soporte premium 24/7",
-        "Aplicación móvil con descargas offline",
-        "Sesiones individuales de Q&A con instructores",
-        "Acceso temprano a nuevos cursos",
-        "Webinars y eventos exclusivos",
-      ],
-      limitations: [],
-      popular: true,
-      buttonText: "Actualizar a Anual",
+      popular: isAnnual,
+      buttonText: isAnnual ? "Actualizar a Anual" : "Actualizar a Mensual",
       buttonVariant: "default" as const,
     },
   ]
@@ -95,31 +73,28 @@ export default function SubscriptionPage() {
   ]
 
   const handlePlanSelect = (planId: string) => {
-    if (planId === "free" || planId === currentPlan) return;
+    if (planId === "free") return;
     
     if (!user) {
       toast.error("Debes iniciar sesión para suscribirte");
       return;
     }
 
-    const plan = plans.find(p => p.id === planId);
-    if (!plan) return;
-
-    setSelectedPlan(plan);
-    setShowPayment(true);
+    // Determinar el plan basado en el toggle y el tipo de plan
+    let planParam = "";
+    if (planId === "pro") {
+      planParam = isAnnual ? "pro-annual" : "pro-monthly";
+    } else {
+      planParam = planId;
+    }
+    
+    console.log(`Redirecting to: /pago-suscripcion?plan=${planParam}`);
+    router.push(`/pago-suscripcion?plan=${planParam}`);
   };
 
-  const handlePaymentSuccess = () => {
-    setShowPayment(false);
-    setCurrentPlan(selectedPlan?.id || "free");
-    toast.success("¡Suscripción activada exitosamente!");
-  };
-
-  const handlePaymentError = (error: string) => {
-    toast.error("Error en el pago", {
-      description: error,
-    });
-  };
+  // Ya no necesitamos estas funciones porque redirigimos al checkout
+  // const handlePaymentSuccess = () => { ... }
+  // const handlePaymentError = (error: string) => { ... }
 
   return (
     <ProtectedRoute>
@@ -167,7 +142,7 @@ export default function SubscriptionPage() {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
             {plans.map((plan) => (
               <Card
                 key={plan.id}
@@ -230,11 +205,11 @@ export default function SubscriptionPage() {
 
                   <Button
                     className="w-full"
-                    variant={currentPlan === plan.id ? "outline" : plan.buttonVariant}
-                    disabled={currentPlan === plan.id}
+                    variant={plan.buttonVariant}
+                    disabled={plan.id === "free"}
                     onClick={() => handlePlanSelect(plan.id)}
                   >
-                    {currentPlan === plan.id ? "Plan Actual" : plan.buttonText}
+                    {plan.id === "free" ? "Plan Actual" : plan.buttonText}
                   </Button>
                 </CardContent>
               </Card>
@@ -254,8 +229,7 @@ export default function SubscriptionPage() {
                     <tr className="border-b">
                       <th className="text-left py-3 px-4">Características</th>
                       <th className="text-center py-3 px-4">Gratis</th>
-                      <th className="text-center py-3 px-4">Pro Mensual</th>
-                      <th className="text-center py-3 px-4">Pro Anual</th>
+                      <th className="text-center py-3 px-4">Pro</th>
                     </tr>
                   </thead>
                   <tbody className="text-sm">
@@ -266,7 +240,6 @@ export default function SubscriptionPage() {
                       </td>
                       <td className="text-center py-3 px-4">10 cursos</td>
                       <td className="text-center py-3 px-4">500+ cursos</td>
-                      <td className="text-center py-3 px-4">500+ cursos</td>
                     </tr>
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
@@ -274,7 +247,6 @@ export default function SubscriptionPage() {
                         Certificados
                       </td>
                       <td className="text-center py-3 px-4">❌</td>
-                      <td className="text-center py-3 px-4">✅</td>
                       <td className="text-center py-3 px-4">✅</td>
                     </tr>
                     <tr className="border-b">
@@ -284,7 +256,6 @@ export default function SubscriptionPage() {
                       </td>
                       <td className="text-center py-3 px-4">❌</td>
                       <td className="text-center py-3 px-4">✅</td>
-                      <td className="text-center py-3 px-4">✅</td>
                     </tr>
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
@@ -293,7 +264,6 @@ export default function SubscriptionPage() {
                       </td>
                       <td className="text-center py-3 px-4">Básica</td>
                       <td className="text-center py-3 px-4">Acceso Completo</td>
-                      <td className="text-center py-3 px-4">Acceso Completo</td>
                     </tr>
                     <tr className="border-b">
                       <td className="py-3 px-4 flex items-center">
@@ -301,8 +271,7 @@ export default function SubscriptionPage() {
                         Soporte
                       </td>
                       <td className="text-center py-3 px-4">Comunidad</td>
-                      <td className="text-center py-3 px-4">Prioritario</td>
-                      <td className="text-center py-3 px-4">Premium</td>
+                      <td className="text-center py-3 px-4">{isAnnual ? 'Premium 24/7' : 'Prioritario'}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -371,45 +340,7 @@ export default function SubscriptionPage() {
           </Card>
         </div>
 
-        {/* Payment Dialog */}
-        <Dialog open={showPayment} onOpenChange={setShowPayment}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Completa Tu Suscripción</DialogTitle>
-              <DialogDescription>
-                {selectedPlan && `Te estás suscribiendo al plan ${selectedPlan.name}.`}
-              </DialogDescription>
-            </DialogHeader>
-            {selectedPlan && (
-              <div>
-                <h4 className="mb-2 text-center">Selecciona tu método de pago:</h4>
-                <div className="flex flex-col gap-4">
-                  {/* Stripe */}
-                  <div className="border rounded-lg p-4">
-                    <p className="font-medium mb-2">Tarjeta de Crédito/Débito</p>
-                    <StripePayment
-                      amount={isAnnual ? selectedPlan.price.annual : selectedPlan.price.monthly}
-                      planName={selectedPlan.name}
-                      planType={isAnnual ? 'anual' : 'mensual'}
-                      onSuccess={handlePaymentSuccess}
-                      onError={handlePaymentError}
-                    />
-                  </div>
-                  {/* PayPal */}
-                  <div className="border rounded-lg p-4">
-                    <p className="font-medium mb-2">PayPal</p>
-                    {/*@ts-ignore*/}
-                    <PayPalPayment
-                      amount={isAnnual ? selectedPlan.price.annual : selectedPlan.price.monthly}
-                      onSuccess={handlePaymentSuccess}
-                      onError={handlePaymentError}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
+        {/* Ya no necesitamos el Payment Dialog porque usamos la página de checkout dedicada */}
       </div>
     </ProtectedRoute>
   )

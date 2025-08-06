@@ -7,12 +7,27 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BookOpen, Play, Clock, Users, Star, Download, Share2, Heart, CheckCircle, Lock, FileText, Video } from "lucide-react"
+import { BookOpen, Play, Clock, Users, Star, Download, Share2, Heart, CheckCircle, Lock, FileText, Video, ShoppingCart } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
+import { toast } from "sonner"
 
 export default function CourseDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter()
+  const { user } = useAuth()
   const [isEnrolled, setIsEnrolled] = useState(false)
   const [currentProgress, setCurrentProgress] = useState(0)
+
+  const handleEnrollClick = () => {
+    if (!user) {
+      toast.error("Debes iniciar sesión para comprar este curso")
+      return
+    }
+    
+    // Redirigir a la página de checkout con el ID del curso
+    router.push(`/checkout?course=${params.id}`)
+  }
 
   // Mock course data - in real app, fetch based on params.id
   const course = {
@@ -37,7 +52,8 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
     lessons: 156,
     lastUpdated: "January 2024",
     language: "English",
-    price: "Free with subscription",
+    price: 49.99, // Precio individual del curso
+    originalPrice: 79.99, // Precio original para mostrar descuento
     tags: ["React", "JavaScript", "Frontend", "Hooks", "Redux"],
     whatYouWillLearn: [
       "Build modern React applications from scratch",
@@ -446,17 +462,52 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
             <Card className="sticky top-8">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <div className="text-3xl font-bold text-green-600 mb-2">{course.price}</div>
-                  <p className="text-sm text-gray-600">Full lifetime access</p>
+                  <div className="text-3xl font-bold text-green-600 mb-1">
+                    ${course.price}
+                  </div>
+                  {course.originalPrice && (
+                    <div className="text-lg text-gray-500 line-through mb-2">
+                      ${course.originalPrice}
+                    </div>
+                  )}
+                  <p className="text-sm text-gray-600">Acceso de por vida</p>
+                  {course.originalPrice && (
+                    <Badge variant="destructive" className="mt-2">
+                      {Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100)}% OFF
+                    </Badge>
+                  )}
                 </div>
 
                 {!isEnrolled ? (
-                  <Button className="w-full mb-4" size="lg" onClick={() => setIsEnrolled(true)}>
-                    Enroll Now
-                  </Button>
+                  <div className="space-y-3">
+                    <Button 
+                      className="w-full" 
+                      size="lg" 
+                      onClick={handleEnrollClick}
+                    >
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Comprar Curso
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      size="lg"
+                    >
+                      <Play className="mr-2 h-4 w-4" />
+                      Vista Previa Gratis
+                    </Button>
+                    <div className="text-center">
+                      <Link 
+                        href="/subscription" 
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        O suscríbete para acceso a todos los cursos
+                      </Link>
+                    </div>
+                  </div>
                 ) : (
                   <Button className="w-full mb-4" size="lg">
-                    Continue Learning
+                    Continuar Aprendiendo
                   </Button>
                 )}
 
