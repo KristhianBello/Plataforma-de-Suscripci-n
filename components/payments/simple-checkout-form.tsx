@@ -14,7 +14,7 @@ import { CheckCircle, AlertCircle, Loader2, CreditCard } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 
-interface CheckoutFormProps {
+interface SimpleCheckoutFormProps {
   amount: number
   planName: string
   planType: 'mensual' | 'anual' | 'curso'
@@ -25,7 +25,7 @@ interface CheckoutFormProps {
   itemType?: 'subscription' | 'course'
 }
 
-export default function CheckoutForm({
+export default function SimpleCheckoutForm({
   amount,
   planName,
   planType,
@@ -34,24 +34,17 @@ export default function CheckoutForm({
   setLoading,
   itemId,
   itemType = 'subscription'
-}: CheckoutFormProps) {
+}: SimpleCheckoutFormProps) {
   const stripe = useStripe()
   const elements = useElements()
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [processing, setProcessing] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
-  const [clientSecret, setClientSecret] = useState<string>('')
-  const [paymentReady, setPaymentReady] = useState(false)
+  const [creatingPayment, setCreatingPayment] = useState(false)
 
-  useEffect(() => {
-    if (itemType === 'subscription') {
-      createSubscription()
-    } else {
-      createPaymentIntent()
-    }
-  }, [])
+  // No crear la suscripción automáticamente, solo preparar el componente
 
-  const createSubscription = async () => {
+  const createSubscriptionAndGetSecret = async (): Promise<string> => {
     try {
       setLoading(true)
       
@@ -66,19 +59,11 @@ export default function CheckoutForm({
         ? process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID
         : process.env.NEXT_PUBLIC_STRIPE_ANNUAL_PRICE_ID
       
-      console.log('Creating subscription with:', {
-        priceId,
-        planType,
-        itemId,
-        userId: session.user?.id
-      })
-      
-      // Verificar que tenemos los price IDs configurados
       if (!priceId) {
         throw new Error('Price ID no configurado para este plan')
       }
       
-      // Crear suscripción usando la API real
+      // Crear suscripción usando la API
       const response = await fetch('/api/stripe/create-subscription', {
         method: 'POST',
         headers: {
@@ -91,58 +76,38 @@ export default function CheckoutForm({
         }),
       })
 
-      console.log('Response status:', response.status)
-
       if (!response.ok) {
-        let errorData
-        try {
-          errorData = await response.json()
-        } catch (parseError) {
-          console.error('Error parsing error response:', parseError)
-          throw new Error(`Error del servidor: ${response.status} ${response.statusText}`)
-        }
-        
-        console.error('API Error:', errorData)
-        throw new Error(errorData.error || `Error del servidor: ${response.status}`)
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al crear la suscripción')
       }
 
       const data = await response.json()
-      console.log('Subscription created successfully:', data)
       
       if (!data.clientSecret) {
         throw new Error('No se recibió client secret del servidor')
       }
       
-      setClientSecret(data.clientSecret)
-      setPaymentReady(true)
+      return data.clientSecret
     } catch (error) {
       console.error('Error creating subscription:', error)
       const errorMsg = error instanceof Error ? error.message : 'Error al crear la suscripción'
       setErrorMessage(errorMsg)
       onError?.(errorMsg)
-      
-      // Solo usar fallback en caso de errores críticos de configuración
-      if (errorMsg.includes('Price ID no configurado') || errorMsg.includes('STRIPE_SECRET_KEY')) {
-        console.log('Using development fallback due to configuration issues')
-        setClientSecret('dev_mode_fallback')
-        setPaymentReady(true)
-      }
+      throw error
     } finally {
       setLoading(false)
     }
   }
 
-  const createPaymentIntent = async () => {
+  const createPaymentIntentAndGetSecret = async (): Promise<string> => {
     try {
       setLoading(true)
       
-      // Obtener el token de autorización del usuario actual
       const { data: { session } } = await supabase.auth.getSession()
       if (!session?.access_token) {
         throw new Error('No hay sesión activa')
       }
       
-      // Crear payment intent usando la API real
       const response = await fetch('/api/stripe/create-payment-intent', {
         method: 'POST',
         headers: {
@@ -162,29 +127,36 @@ export default function CheckoutForm({
       }
 
       const data = await response.json()
-      setClientSecret(data.clientSecret)
-      setPaymentReady(true)
+      
+      if (!data.clientSecret) {
+        throw new Error('No se recibió client secret del servidor')
+      }
+      
+      return data.clientSecret
     } catch (error) {
       console.error('Error creating payment intent:', error)
       const errorMsg = error instanceof Error ? error.message : 'Error al crear el payment intent'
       setErrorMessage(errorMsg)
       onError?.(errorMsg)
-      
-      // Para desarrollo, permitir continuar con un client secret simulado
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Using development fallback for client secret')
-        setClientSecret('pi_dev_test_client_secret')
-        setPaymentReady(true)
-      }
+      throw error
     } finally {
       setLoading(false)
     }
   }
 
+  // Funciones legacy para compatibilidad (no se usan más)
+  const createSubscription = async () => {
+    await createSubscriptionAndGetSecret()
+  }
+
+  const createPaymentIntent = async () => {
+    await createPaymentIntentAndGetSecret()
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    if (!stripe || !elements || !clientSecret) {
+    if (!stripe || !elements) {
       return
     }
 
@@ -192,8 +164,26 @@ export default function CheckoutForm({
     setErrorMessage('')
 
     try {
+      // Crear el payment intent/subscription cuando el usuario envía el formulario
+      setCreatingPayment(true)
+      
+      let currentClientSecret: string
+      
+      if (itemType === 'subscription') {
+        currentClientSecret = await createSubscriptionAndGetSecret()
+      } else {
+        currentClientSecret = await createPaymentIntentAndGetSecret()
+      }
+      
+      if (!currentClientSecret) {
+        throw new Error('No se pudo crear el payment intent')
+      }
+      
+      setCreatingPayment(false)
+
       const { error } = await stripe.confirmPayment({
         elements,
+        clientSecret: currentClientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/pago-suscripcion/success?plan=${planType}`,
         },
@@ -222,6 +212,7 @@ export default function CheckoutForm({
       })
     } finally {
       setProcessing(false)
+      setCreatingPayment(false)
     }
   }
 
@@ -244,55 +235,7 @@ export default function CheckoutForm({
     )
   }
 
-  if (!paymentReady || !clientSecret) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin mr-3" />
-          <span className="text-gray-600">Preparando formulario de pago...</span>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  // Si el client secret es el fallback de desarrollo, usar el formulario de desarrollo
-  if (clientSecret === 'dev_mode_fallback') {
-    return (
-      <Card>
-        <CardContent className="py-6">
-          <Alert className="border-orange-200 bg-orange-50 mb-4">
-            <AlertCircle className="h-4 w-4 text-orange-600" />
-            <AlertDescription className="text-orange-800">
-              <strong>Modo de desarrollo activado:</strong> Hay problemas con la configuración de Stripe.
-              Se usará una simulación de pago para continuar.
-            </AlertDescription>
-          </Alert>
-          
-          <div className="text-center">
-            <Button
-              onClick={() => {
-                // Simular éxito inmediatamente
-                setTimeout(() => {
-                  setSucceeded(true)
-                  toast.success('¡Pago simulado exitoso!', {
-                    description: `Tu ${itemType === 'subscription' ? 'suscripción' : 'curso'} ha sido activado correctamente.`,
-                  })
-                  onSuccess?.()
-                }, 1000)
-              }}
-              className="w-full bg-orange-600 hover:bg-orange-700"
-              size="lg"
-            >
-              Continuar con Simulación (Desarrollo)
-            </Button>
-            <p className="text-xs text-gray-500 mt-2">
-              Este es un pago simulado para desarrollo. No se realizará ningún cargo real.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
+  // Mostrar el formulario directamente, sin esperar el clientSecret
 
   return (
     <Card>
@@ -377,11 +320,16 @@ export default function CheckoutForm({
           {/* Botón de pago */}
           <Button
             type="submit"
-            disabled={!stripe || processing}
+            disabled={!stripe || processing || creatingPayment}
             className="w-full"
             size="lg"
           >
-            {processing ? (
+            {creatingPayment ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Preparando pago...
+              </>
+            ) : processing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Procesando pago...
