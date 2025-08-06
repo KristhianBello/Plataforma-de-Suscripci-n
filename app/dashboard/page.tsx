@@ -9,14 +9,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { BookOpen, Clock, Award, TrendingUp, Play, Bell, Settings, Search, Filter, LogOut } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/hooks/use-auth"
 import { ProtectedRoute } from "@/components/protected-route"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 function DashboardContent() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -130,7 +126,7 @@ function DashboardContent() {
       progress: 75,
       totalLessons: 24,
       completedLessons: 18,
-      thumbnail: "/placeholder.svg?height=100&width=150",
+      thumbnail: "/images/react-curso.jpg",
       category: "Development",
     },
     {
@@ -139,7 +135,7 @@ function DashboardContent() {
       progress: 45,
       totalLessons: 32,
       completedLessons: 14,
-      thumbnail: "/placeholder.svg?height=100&width=150",
+      thumbnail: "/images/ui-ux-design-curso.jpg",
       category: "Design",
     },
     {
@@ -148,7 +144,7 @@ function DashboardContent() {
       progress: 20,
       totalLessons: 40,
       completedLessons: 8,
-      thumbnail: "/placeholder.svg?height=100&width=150",
+      thumbnail: "/images/data_science_using_python-imagen.jpg",
       category: "Data Science",
     },
   ]
@@ -263,11 +259,8 @@ function DashboardContent() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg?height=32&width=32" alt="Avatar" />
-                      <AvatarFallback>
-                        {user?.user_metadata?.first_name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
-                        {user?.user_metadata?.last_name?.[0] || ''}
-                      </AvatarFallback>
+                      <AvatarImage src="/images/avatar-imagen.webp" alt="Avatar" />
+                      <AvatarFallback>CD</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -299,11 +292,8 @@ function DashboardContent() {
               <CardHeader>
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-12 w-12">
-                    <AvatarImage src="/placeholder.svg?height=48&width=48" />
-                    <AvatarFallback>
-                      {user?.user_metadata?.first_name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
-                      {user?.user_metadata?.last_name?.[0] || ''}
-                    </AvatarFallback>
+                    <AvatarImage src="/images/avatar-imagen.webp" alt="Carlos Delgado" />
+                    <AvatarFallback>CD</AvatarFallback>
                   </Avatar>
                   <div>
                     <h3 className="font-semibold">
@@ -452,10 +442,12 @@ function DashboardContent() {
                   {recentCourses.map((course) => (
                     <Card key={course.id} className="cursor-pointer hover:shadow-md transition-shadow">
                       <div className="aspect-video bg-gray-100 rounded-t-lg relative overflow-hidden">
-                        <img
-                          src={course.thumbnail || "/placeholder.svg"}
+                        <Image
+                          src={course.thumbnail}
                           alt={course.title}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                           <Button size="sm" className="rounded-full">
@@ -503,11 +495,17 @@ function DashboardContent() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[1, 2, 3].map((i) => (
                     <Card key={i} className="cursor-pointer hover:shadow-md transition-shadow">
-                      <div className="aspect-video bg-gray-100 rounded-t-lg">
-                        <img
-                          src={`/placeholder.svg?height=120&width=200&query=recommended course ${i}`}
-                          alt={`Recommended Course ${i}`}
-                          className="w-full h-full object-cover rounded-t-lg"
+                      <div className="aspect-video bg-gray-100 rounded-t-lg relative">
+                        <Image
+                          src={
+                            i === 1 ? "/images/js-avanzado-imagen.jpeg" : 
+                            i === 2 ? "/images/js-avanzado-2-imagen.jpg" : 
+                            "/images/js-avanzado-3.jpg"
+                          }
+                          alt={`Curso de JavaScript Avanzado ${i}`}
+                          fill
+                          className="object-cover rounded-t-lg"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       </div>
                       <CardContent className="p-4">

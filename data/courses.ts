@@ -9,7 +9,7 @@ export const courses = [
     students: 12543,
     hours: 42,
     tags: ["React", "JavaScript", "Frontend"],
-    image: "/courses/curso1.jpg" // 
+    image: "/courses/curso111.jpg"
   },
   {
     id: 2,
@@ -34,5 +34,17 @@ export const courses = [
     hours: 65,
     tags: ["Python", "Data Science", "Machine Learning"],
     image: "/courses/curso4.jpg"
+  },
+  {
+    id: 4,
+    title: "Full Stack Web Development",
+    category: "Development",
+    level: "Intermediate",
+    instructor: "Maria Rodriguez",
+    rating: 4.7,
+    students: 9876,
+    hours: 55,
+    tags: ["JavaScript", "Node.js", "MongoDB", "Express"],
+    image: "/courses/curso111.jpg"
   }
 ];

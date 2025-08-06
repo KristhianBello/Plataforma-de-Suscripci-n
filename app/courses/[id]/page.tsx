@@ -7,20 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  BookOpen,
-  Play,
-  Clock,
-  Users,
-  Star,
-  Download,
-  Share2,
-  Heart,
-  CheckCircle,
-  Lock,
-  FileText,
-  Video,
-} from "lucide-react"
+import { BookOpen, Play, Clock, Users, Star, Download, Share2, Heart, CheckCircle, Lock, FileText, Video } from "lucide-react"
 import Link from "next/link"
 
 export default function CourseDetailPage({ params }: { params: { id: string } }) {
@@ -40,7 +27,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
     },
     description:
       "Master React from basics to advanced concepts with hands-on projects. This comprehensive course covers everything you need to know to become a proficient React developer.",
-    thumbnail: "/placeholder.svg?height=400&width=600",
+    thumbnail: "/courses/curso111.jpg",
     category: "Development",
     level: "Intermediate",
     rating: 4.8,

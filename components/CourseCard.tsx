@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 export default function CourseCard({ title, instructor, rating, students, hours, tags, image }) {
+  
   return (
     <div className="rounded-lg shadow p-4 bg-white">
       <Image
