@@ -33,7 +33,6 @@ yarn-error.log*
 # env files (ignore all env files except examples)
 .env
 .env.*
-!.env.example
 
 # vercel
 .vercel
@@ -75,3 +74,5 @@ temp/
 *.pem
 *.key
 !*.example.*
+
+.env.example

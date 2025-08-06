@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { BookOpen, Check, Crown, CreditCard, Award, Download, Smartphone, Headphones } from "lucide-react"
 import Link from "next/link"
 import StripePayment from "@/components/payments/stripe-payment"
+import PayPalPayment from "@/components/payments/paypal-payment"
 import { useAuth } from "@/hooks/use-auth"
 import { ProtectedRoute } from "@/components/protected-route"
 import { toast } from "sonner"
@@ -380,13 +381,32 @@ export default function SubscriptionPage() {
               </DialogDescription>
             </DialogHeader>
             {selectedPlan && (
-              <StripePayment
-                amount={isAnnual ? selectedPlan.price.annual : selectedPlan.price.monthly}
-                planName={selectedPlan.name}
-                planType={isAnnual ? 'anual' : 'mensual'}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-              />
+              <div>
+                <h4 className="mb-2 text-center">Selecciona tu método de pago:</h4>
+                <div className="flex flex-col gap-4">
+                  {/* Stripe */}
+                  <div className="border rounded-lg p-4">
+                    <p className="font-medium mb-2">Tarjeta de Crédito/Débito</p>
+                    <StripePayment
+                      amount={isAnnual ? selectedPlan.price.annual : selectedPlan.price.monthly}
+                      planName={selectedPlan.name}
+                      planType={isAnnual ? 'anual' : 'mensual'}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                    />
+                  </div>
+                  {/* PayPal */}
+                  <div className="border rounded-lg p-4">
+                    <p className="font-medium mb-2">PayPal</p>
+                    {/*@ts-ignore*/}
+                    <PayPalPayment
+                      amount={isAnnual ? selectedPlan.price.annual : selectedPlan.price.monthly}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </DialogContent>
         </Dialog>
